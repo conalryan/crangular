@@ -1,0 +1,28 @@
+<p>Bitmask: {{printBitMask(bitMask)}}</p>
+<p>Value {{bitMask.join()}} </p>
+<br/>
+
+<p>singleBitMask: {{singleBitMask.toString(2)}}</p>
+<p>Value {{singleBitMask}} </p>
+<br/>
+
+<button type="button" (click)="setBit(set.value)">Set Bit:</button>
+<input type="number" #set/>
+
+<br/><br/>
+
+<button type="button" (click)="getBit(get.value)">Get Bit:</button>
+<input type="number" #get/>
+<span>...bit is: {{getBit(get.value)}}</span>
+
+<br/><br/>
+<button type="button" (click)="clearBit(clear.value)">Clear Bit:</button>
+<input type="number" #clear/>
+
+<br/><br/>
+<button type="button" (click)="setAll(setall.value)">Set All:</button>
+<input type="number" #setall/>
+
+<br/><br/>
+<button type="button" (click)="getOffset(off.value)">Offset:</button>
+<input type="number" #off/>
