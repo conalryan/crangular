@@ -17,6 +17,20 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "calendargrid": [
+        "dist/calendargrid"
+      ],
+      "calendargrid/*": [
+        "dist/calendargrid/*"
+      ],
+      "crangular": [
+        "dist/crangular"
+      ],
+      "crangular/*": [
+        "dist/crangular/*"
+      ]
+    }
   }
 }

@@ -2,5 +2,161 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
-  "projects": {}
+  "projects": {
+    "examples": {
+      "root": "projects/examples/",
+      "sourceRoot": "projects/examples/src",
+      "projectType": "application",
+      "prefix": "excr",
+      "schematics": {
+        "@schematics/angular:component": {
+          "changeDetection": "OnPush",
+          "style": "scss",
+          "prefix": "excr"
+        },
+        "@schematics/angular:directive": {
+          "prefix": "excr"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/examples",
+            "index": "projects/examples/src/index.html",
+            "main": "projects/examples/src/main.ts",
+            "polyfills": "projects/examples/src/polyfills.ts",
+            "tsConfig": "projects/examples/tsconfig.app.json",
+            "assets": [
+              "projects/examples/src/favicon.ico",
+              "projects/examples/src/assets"
+            ],
+            "styles": [
+              "projects/examples/src/styles.scss"
+            ],
+            "scripts": [],
+            "es5BrowserSupport": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/examples/src/environments/environment.ts",
+                  "with": "projects/examples/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "examples:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "examples:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "examples:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/examples/src/test.ts",
+            "polyfills": "projects/examples/src/polyfills.ts",
+            "tsConfig": "projects/examples/tsconfig.spec.json",
+            "karmaConfig": "projects/examples/karma.conf.js",
+            "styles": [
+              "projects/examples/src/styles.scss"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/examples/src/favicon.ico",
+              "projects/examples/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/examples/tsconfig.app.json",
+              "projects/examples/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "crangular": {
+      "root": "projects/crangular",
+      "sourceRoot": "projects/crangular/src",
+      "projectType": "library",
+      "prefix": "cr",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/crangular/tsconfig.lib.json",
+            "project": "projects/crangular/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/crangular/src/test.ts",
+            "tsConfig": "projects/crangular/tsconfig.spec.json",
+            "karmaConfig": "projects/crangular/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/crangular/tsconfig.lib.json",
+              "projects/crangular/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "changeDetection": "OnPush",
+      "style": "scss",
+      "prefix": "cr"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "cr"
+    }
+  },
+  "defaultProject": "examples"
 }
