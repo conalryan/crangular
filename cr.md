@@ -2,7 +2,8 @@
 
 ## Scaffold
 ```bash
-$ ng new crangular --createApplication=false
+ng new crangular --createApplication=false
+
 ? Would you like to add Angular routing? Yes
 ? Which stylesheet format would you like to use? SCSS   [ http://sass-lang.com/documentation/file.SASS_REFERENCE.html#syntax ]
 CREATE crangular/README.md (1026 bytes)
@@ -28,6 +29,34 @@ found 0 vulnerabilities
     Successfully initialized git.
 ```
 
+## Set Defaults
+
+### angular.json
+- CLI defaults to:
+  - workspace level, which can be overridden by defaults set at the:
+  - project level, which can be overridden by:
+  - command line.
+
+changeDetection OnPush, styleSheet scss, prefix cr
+```bash
+ng config schematics.@schematics/angular:component.changeDetection OnPush
+ng config schematics.@schematics/angular:component.styleSheet scss
+ng config schematics.@schematics/angular:component.prefix cr
+ng config schematics.@schematics/angular:directive.prefix cr
+```
+
+```json
+"@schematics/angular:component": {
+    "changeDetection": "OnPush",
+    "prefix": "hcc",
+    "styleext": "scss"
+  },
+  "@schematics/angular:directive": {
+    "prefix": "hcc"
+  }
+}
+```
+
 ### ng-bootstrap
 ```bash
 yarn add @ng-bootstrap/ng-bootstrap@4
@@ -36,3 +65,8 @@ yarn add @ng-bootstrap/ng-bootstrap@4
 Note: Change all versions in `package.json` to [caret version](https://www.npmjs.com/package/semver#caret-ranges-123-025-004):
 - `^1` < `2`
 - `^0.1` < `0.2`
+
+### examples app
+```bash
+$ ng g app examples --style=scss --prefix=cr
+```
