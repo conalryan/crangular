@@ -1,0 +1,116 @@
+<h1>Size of Types:</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Value</th>
+      <th>Bits</th>
+      <th>Size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1 bit</td>
+      <td>{{ bit1 }}</td>
+      <td>{{ bit1.toString(2) }}</td>
+      <td>{{ sizeof(bit1) }}</td>
+    </tr>
+    <tr>
+      <td>2 bits</td>
+      <td>{{ bit2 }}</td>
+      <td>{{ bit2.toString(2) }}</td>
+      <td>{{ sizeof(bit2) }}</td>
+    </tr>
+    <tr>
+      <td>boolean</td>
+      <td>{{ bool1 }}</td>
+      <td>{{ (+bool1).toString(2) }}</td>
+      <td>{{ sizeof(bool1) }}</td>
+    </tr>
+    <tr>
+      <td>boolean 1 array</td>
+      <td>{{ boolArr1 }}</td>
+      <td>{{ boolToBits(boolArr1) }}</td>
+      <td>{{ sizeof(boolArr1) }}</td>
+    </tr>
+    <tr>
+      <td>boolean 2 array</td>
+      <td>{{ boolArr2 }}</td>
+      <td>{{ boolToBits(boolArr2) }}</td>
+      <td>{{ sizeof(boolArr2) }}</td>
+    </tr>
+    <tr>
+      <td>number</td>
+      <td>{{ num1 }}</td>
+      <td>{{ num1.toString(2) }}</td>
+      <td>{{ sizeof(num1) }}</td>
+    </tr>
+    <tr>
+      <td>number 1 array</td>
+      <td>{{ numArr1 }}</td>
+      <td>{{ numsToBits(numArr1) }}</td>
+      <td>{{ sizeof(numArr1) }}</td>
+    </tr>
+    <tr>
+      <td>number 2 array</td>
+      <td>{{ numArr2 }}</td>
+      <td>{{ numsToBits(numArr2) }}</td>
+      <td>{{ sizeof(numArr2) }}</td>
+    </tr>
+    <tr>
+      <td>Object empty</td>
+      <td>{{ objEmpty }}</td>
+      <td></td>
+      <td>{{ sizeof(objEmpty) }}</td>
+    </tr>
+    <tr>
+      <td>Object 1 string</td>
+      <td>{{ objStr1 }}</td>
+      <td></td>
+      <td>{{ sizeof(objStr1) }}</td>
+    </tr>
+    <tr>
+      <td>Set of empty number</td>
+      <td>{{ setNumEmpty }}</td>
+      <td>{{ setNumsToBits(setNumEmpty) }}</td>
+      <td>{{ sizeof(setNumEmpty) }}</td>
+    </tr>
+    <tr>
+      <td>Set of 1 number</td>
+      <td>{{ setNum1 }}</td>
+      <td>{{ setNumsToBits(setNum1) }}</td>
+      <td>{{ sizeof(setNum1) }}</td>
+    </tr>
+    <tr>
+      <td>Set of 2 numbers</td>
+      <td>{{ setNum2 }}</td>
+      <td>{{ setNumsToBits(setNum2) }}</td>
+      <td>{{ sizeof(setNum2) }}</td>
+    </tr>
+    <tr>
+      <td>String 1 char</td>
+      <td>{{ str1 }}</td>
+      <td>{{ (+str1).toString(2) }}</td>
+      <td>{{ sizeof(str1) }}</td>
+    </tr>
+    <tr>
+      <td>String 2 chars</td>
+      <td>{{ str2 }}</td>
+      <td>{{ (+str2).toString(2) }}</td>
+      <td>{{ sizeof(str2) }}</td>
+    </tr>
+    <tr>
+      <td>String array 1 char</td>
+      <td>{{ strArr1 }}</td>
+      <td>{{ (+strArr1).toString(2) }}</td>
+      <td>{{ sizeof(strArr1) }}</td>
+    </tr>
+    <tr>
+      <td>String array 2 chars</td>
+      <td>{{ strArr2 }}</td>
+      <td>{{ (+strArr2).toString(2) }}</td>
+      <td>{{ sizeof(strArr2) }}</td>
+    </tr>
+  </tbody>
+</table>
