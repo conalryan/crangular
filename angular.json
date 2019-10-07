@@ -7,15 +7,15 @@
       "root": "projects/examples/",
       "sourceRoot": "projects/examples/src",
       "projectType": "application",
-      "prefix": "cr",
+      "prefix": "excr",
       "schematics": {
         "@schematics/angular:component": {
           "changeDetection": "OnPush",
           "style": "scss",
-          "prefix": "cr"
+          "prefix": "excr"
         },
         "@schematics/angular:directive": {
-          "prefix": "cr"
+          "prefix": "excr"
         }
       },
       "architect": {
