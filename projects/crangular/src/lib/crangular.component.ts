@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'cr-calendargrid',
+  selector: 'cr-crangular',
   template: `
     <p>
-      calendargrid works!
+      crangular works!
     </p>
   `,
   styles: []
 })
-export class CalendargridComponent implements OnInit {
+export class CrangularComponent implements OnInit {
 
   constructor() { }
 

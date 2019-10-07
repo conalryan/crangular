@@ -74,5 +74,5 @@ I'm surprised I still need to specify `--style=scss` and `prefix=cr` even though
 
 ### calendargrid lib
 ```bash
-ng g lib calendargrid --style=scss --prefix=cr
+ng g lib crangular --style=scss --prefix=cr
 ```

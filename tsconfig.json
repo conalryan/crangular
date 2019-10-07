@@ -24,6 +24,12 @@
       ],
       "calendargrid/*": [
         "dist/calendargrid/*"
+      ],
+      "crangular": [
+        "dist/crangular"
+      ],
+      "crangular/*": [
+        "dist/crangular/*"
       ]
     }
   }
