@@ -7,6 +7,11 @@ import { calendarGridData } from './calendar-grid-data.stub';
   template: `
     <h2>Calendar Grid Wrapper</h2>
 
+    <h4>No templates (use with primitive value)</h4>
+    <cr-calendar-grid [calendarGridData]="calendarGridData"></cr-calendar-grid>
+
+    <hr/>
+
     <h4>Single template for all rows</h4>
     <cr-calendar-grid [calendarGridData]="calendarGridData">
       <cr-calendar-grid-row>

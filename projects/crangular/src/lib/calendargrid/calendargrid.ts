@@ -42,12 +42,6 @@ export class CalendarGridCellDirective {
  */
 @Directive({selector: 'cr-calendar-grid-row'})
 export class CalendarGridRowDirective implements AfterContentChecked {
-  /**
-   * The calendar row label.
-   *
-   * Use the [`CalendarGridLabel`](#/components/calendargrid/api#CalendarGridLabel) directive for non-string labels.
-   */
-  @Input() title: string;
 
   labelTpl: CalendarGridLabelDirective | null;
   cellTpl: CalendarGridCellDirective | null;
