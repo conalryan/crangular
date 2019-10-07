@@ -61,10 +61,14 @@ ng config schematics.@schematics/angular:directive.prefix cr
 ```bash
 yarn add @ng-bootstrap/ng-bootstrap@4
 ```
-
-Note: Change all versions in `package.json` to [caret version](https://www.npmjs.com/package/semver#caret-ranges-123-025-004):
-- `^1` < `2`
-- `^0.1` < `0.2`
+### bootstrap
+```bash
+yarn add bootstrap
+```
+styles.scss
+```scss
+@import '~bootstrap/scss/bootstrap';
+```
 
 ### examples app
 ```bash

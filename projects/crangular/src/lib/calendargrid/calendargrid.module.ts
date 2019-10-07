@@ -11,6 +11,12 @@ import { CalendarGridLabelDirective, CalendarGridCellDirective, CalendarGridRowD
   ],
   imports: [
     CommonModule
+  ],
+  exports: [
+    CalendarGridLabelDirective,
+    CalendarGridCellDirective,
+    CalendarGridRowDirective,
+    CalendarGridComponent
   ]
 })
 export class CalendargridModule { }

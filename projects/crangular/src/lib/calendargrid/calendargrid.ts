@@ -70,24 +70,21 @@ export class CalendarGridRowDirective implements AfterContentChecked {
  */
 @Component({
   selector: 'cr-calendar-grid',
-  exportAs: 'crCalendarGrid',
   template: `
-
-    <div *ngFor="let row of rows">
+    <!--<div *ngFor="let row of rows">
       <ng-template [ngTemplateOutlet]="row.labelTpl?.templateRef"></ng-template>
     </div>
 
     <ng-template ngFor let-row [ngForOf]="rows">
       <ng-template [ngTemplateOutlet]="row.cellTpl?.templateRef"></ng-template>
-    </ng-template>
-
+    </ng-template>-->
 
     <div *ngFor="let calendarGridRow of calendarGridData.rows; let i = index" class="row calendar-grid-row">
       <div class="col-2">
       <ng-container *ngIf="!labelTpl(i)">
         {{ calendarGridRow.label }}
       </ng-container>
-      <ng-container *ngTemplateOutlet="labelTpl(i);context:{label:calendarGridRow.label}"></ng-container>
+      <ng-container *ngTemplateOutlet="labelTpl(i)?.templateRef;context:{label:calendarGridRow.label}"></ng-container>
       </div>
       <div class="col d-flex pl-0">
         <div *ngFor="let calendarCell of calendarGridRow.cells"
@@ -95,7 +92,7 @@ export class CalendarGridRowDirective implements AfterContentChecked {
           <ng-container *ngIf="!cellTpl(i)">
             {{ calendarCell.value }}
           </ng-container>
-          <ng-container *ngTemplateOutlet="cellTpl(i);context:{cell:calendarCell}"></ng-container>
+          <ng-container *ngTemplateOutlet="cellTpl(i)?.templateRef;context:{cell:calendarCell}"></ng-container>
         </div>
       </div>
     </div>
@@ -114,7 +111,7 @@ export class CalendarGridRowDirective implements AfterContentChecked {
     }
   `]
 })
-export class CalendarGridComponent implements AfterContentChecked {
+export class CalendarGridComponent {
 
   @Input() calendarGridData: CalendarGridData;
   @ContentChildren(CalendarGridRowDirective) rows: QueryList<CalendarGridRowDirective>;
@@ -125,44 +122,13 @@ export class CalendarGridComponent implements AfterContentChecked {
     // this.orientation = config.orientation;
   }
 
-  /**
-   * Selects the tab with the given id and shows its associated content panel.
-   *
-   * Any other tab that was previously selected becomes unselected and its associated pane is removed from DOM or
-   * hidden depending on the `destroyOnHide` value.
-   */
-  select(tabId: string) {
-    // let selectedTab = this._getTabById(tabId);
-    // if (selectedTab && !selectedTab.disabled && this.activeId !== selectedTab.id) {
-    //   let defaultPrevented = false;
-
-    //   this.tabChange.emit(
-    //       {activeId: this.activeId, nextId: selectedTab.id, preventDefault: () => { defaultPrevented = true; }});
-
-    //   if (!defaultPrevented) {
-    //     this.activeId = selectedTab.id;
-    //   }
-    // }
-  }
-
-  ngAfterContentChecked() {
-    // auto-correct activeId that might have been set incorrectly as input
-    // let activeTab = this._getTabById(this.activeId);
-    // this.activeId = activeTab ? activeTab.id : (this.rows.length ? this.rows.first.id : null);
-  }
-
-  private _getTabById(id: string): CalendarGridRowDirective {
-    // let tabsWithId: NgbTab[] = this.rows.filter(tab => tab.id === id);
-    // return tabsWithId.length ? tabsWithId[0] : null;
-    return null;
-  }
-
   labelTpl(index: number): CalendarGridLabelDirective | null {
     let labelTpl: CalendarGridLabelDirective | null;
     if (this.rows && this.rows.length === 1) {
-      labelTpl = this.rows[0].labelTpl;
+      labelTpl = this.rows.first.labelTpl;
     } else if (this.rows && this.rows.length > 1) {
-      labelTpl = this.rows[index].labelTpl;
+      const row = this.rows.find((row, idx, rows) => idx === index);
+      labelTpl = row ? row.labelTpl : this.rows.last.labelTpl;
     }
     return labelTpl;
   }
@@ -170,9 +136,10 @@ export class CalendarGridComponent implements AfterContentChecked {
   cellTpl(index: number): CalendarGridCellDirective | null {
     let cellTpl: CalendarGridCellDirective | null;
     if (this.rows && this.rows.length === 1) {
-      cellTpl = this.rows[0].cellTpl;
+      cellTpl = this.rows.first.cellTpl;
     } else if (this.rows && this.rows.length > 1) {
-      cellTpl = this.rows[index].cellTpl;
+      const row = this.rows.find((row, idx, rows) => idx === index);
+      cellTpl = row ? row.cellTpl : this.rows.last.cellTpl;
     }
     return cellTpl;
   }
