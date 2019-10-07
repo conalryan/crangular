@@ -37,22 +37,22 @@ found 0 vulnerabilities
   - project level, which can be overridden by:
   - command line.
 
-changeDetection OnPush, styleSheet scss, prefix cr
+changeDetection OnPush, style scss, prefix cr
 ```bash
 ng config schematics.@schematics/angular:component.changeDetection OnPush
-ng config schematics.@schematics/angular:component.styleSheet scss
 ng config schematics.@schematics/angular:component.prefix cr
+ng config schematics.@schematics/angular:component.style scss
 ng config schematics.@schematics/angular:directive.prefix cr
 ```
 
 ```json
 "@schematics/angular:component": {
     "changeDetection": "OnPush",
-    "prefix": "hcc",
-    "styleext": "scss"
+    "prefix": "cr",
+    "style": "scss"
   },
   "@schematics/angular:directive": {
-    "prefix": "hcc"
+    "prefix": "cr"
   }
 }
 ```
@@ -68,5 +68,7 @@ Note: Change all versions in `package.json` to [caret version](https://www.npmjs
 
 ### examples app
 ```bash
-$ ng g app examples --style=scss --prefix=cr
+ng g app examples --style=scss --prefix=cr
 ```
+I'm surprised I still need to specify `--style=scss` and `prefix=cr` even though the were added as defaults.
+
