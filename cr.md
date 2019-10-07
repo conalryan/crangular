@@ -72,7 +72,12 @@ ng g app examples --style=scss --prefix=cr --routing
 ```
 I'm surprised I still need to specify `--style=scss` and `prefix=cr` even though the were added as defaults.
 
-### calendargrid lib
+### crangular lib
 ```bash
 ng g lib crangular --style=scss --prefix=cr
+```
+
+### calendargrid module
+```bash
+ng g m calendargrid --project crangular
 ```
