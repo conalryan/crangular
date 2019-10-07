@@ -10,7 +10,12 @@
       "prefix": "cr",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "changeDetection": "OnPush",
+          "style": "scss",
+          "prefix": "cr"
+        },
+        "@schematics/angular:directive": {
+          "prefix": "cr"
         }
       },
       "architect": {
@@ -128,6 +133,41 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "projects/examples-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "calendargrid": {
+      "root": "projects/calendargrid",
+      "sourceRoot": "projects/calendargrid/src",
+      "projectType": "library",
+      "prefix": "cr",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/calendargrid/tsconfig.lib.json",
+            "project": "projects/calendargrid/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/calendargrid/src/test.ts",
+            "tsConfig": "projects/calendargrid/tsconfig.spec.json",
+            "karmaConfig": "projects/calendargrid/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/calendargrid/tsconfig.lib.json",
+              "projects/calendargrid/tsconfig.spec.json"
+            ],
             "exclude": [
               "**/node_modules/**"
             ]
