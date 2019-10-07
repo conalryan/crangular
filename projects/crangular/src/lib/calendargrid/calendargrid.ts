@@ -1,4 +1,4 @@
-import { AfterContentChecked, Component, ContentChildren, Directive, Input, QueryList, TemplateRef } from '@angular/core';
+import { AfterContentChecked, Component, ContentChildren, Directive, Input, QueryList, TemplateRef, HostBinding } from '@angular/core';
 
 export interface CalendarGridCell<T> {
   id: string;
@@ -59,47 +59,99 @@ export class CalendarGridRowDirective implements AfterContentChecked {
   }
 }
 
+@Component({
+  selector: 'cr-calendar-grid-label',
+  template: `
+    <ng-content></ng-content>
+  `,
+  styles: [`
+    :host {
+      // border: 1px solid red;
+      display: inline-block;
+    }
+  `]
+})
+export class CalendarGridLabelComponent {
+
+  @HostBinding('class.col-2') apply: boolean = true;
+
+  constructor() { }
+}
+
+@Component({
+  selector: 'cr-calendar-grid-cell',
+  template: `
+    <div class="flex-grow-1 calendar-grid-cell">
+      <ng-content></ng-content>
+    </div>
+  `,
+  styles: [`
+    .calendar-grid-cell {
+      //border: 1px solid blue;
+      text-align: center;
+      // https://stackoverflow.com/questions/25066214/flexbox-not-giving-equal-width-to-elements/25066844#25066844
+      flex-basis: 0;
+    }
+  `]
+})
+export class CalendarGridCellComponent {
+
+  @HostBinding('class.col') col: boolean = true;
+  @HostBinding('class.d-flex') dFlex: boolean = true;
+  @HostBinding('class.p-0') pl: boolean = true;
+
+  constructor() { }
+}
+
+@Component({
+  selector: 'cr-calendar-grid-row',
+  template: `
+    <ng-content select="cr-calendar-grid-label"></ng-content>
+    <ng-content></ng-content>
+  `,
+  styles: [`
+    // .calendar-grid-row:not(:last-child) {
+    //   border-bottom: 1px solid #d2d2d2;
+    // }
+    :host:not(:last-child) {
+      border-bottom: 1px solid #d2d2d2;
+    }
+    :host {
+      // border: 1px solid yellow;
+    }
+  `]
+})
+export class CalendarGridRowComponent {
+
+  @HostBinding('class.row') apply: boolean = true;
+
+  constructor() { }
+}
+
 /**
  * A component that makes it easy to create tabbed interface.
  */
 @Component({
   selector: 'cr-calendar-grid',
   template: `
-    <!--<div *ngFor="let row of rows">
-      <ng-template [ngTemplateOutlet]="row.labelTpl?.templateRef"></ng-template>
-    </div>
+    <cr-calendar-grid-row *ngFor="let calendarGridRow of calendarGridData.rows; let i = index">
 
-    <ng-template ngFor let-row [ngForOf]="rows">
-      <ng-template [ngTemplateOutlet]="row.cellTpl?.templateRef"></ng-template>
-    </ng-template>-->
+      <cr-calendar-grid-label>
+        <ng-container *ngIf="!labelTpl(i)">{{ calendarGridRow.label }}</ng-container>
+        <ng-container *ngTemplateOutlet="labelTpl(i)?.templateRef;context:{label:calendarGridRow.label}"></ng-container>
+      </cr-calendar-grid-label>
 
-    <div *ngFor="let calendarGridRow of calendarGridData.rows; let i = index" class="row calendar-grid-row">
-      <div class="col-2">
-      <ng-container *ngIf="!labelTpl(i)">
-        {{ calendarGridRow.label }}
-      </ng-container>
-      <ng-container *ngTemplateOutlet="labelTpl(i)?.templateRef;context:{label:calendarGridRow.label}"></ng-container>
-      </div>
-      <div class="col d-flex pl-0">
-        <div *ngFor="let calendarCell of calendarGridRow.cells"
-          class="flex-grow-1 calendar-grid-cell">
-          <ng-container *ngIf="!cellTpl(i)">
-            {{ calendarCell.value }}
-          </ng-container>
-          <ng-container *ngTemplateOutlet="cellTpl(i)?.templateRef;context:{cell:calendarCell}"></ng-container>
-        </div>
-      </div>
-    </div>
+      <cr-calendar-grid-cell *ngFor="let calendarCell of calendarGridRow.cells">
+        <ng-container *ngIf="!cellTpl(i)">{{ calendarCell.value }}</ng-container>
+        <ng-container *ngTemplateOutlet="cellTpl(i)?.templateRef;context:{cell:calendarCell}"></ng-container>
+      </cr-calendar-grid-cell>
+
+    </cr-calendar-grid-row>
   `,
   styles: [`
-    .calendar-grid-row:not(:last-child) {
-      border-bottom: 1px solid #d2d2d2;
-    }
-    .calendar-grid-cell {
-      text-align: center;
-      // https://stackoverflow.com/questions/25066214/flexbox-not-giving-equal-width-to-elements/25066844#25066844
-      flex-basis: 0;
-    }
+    // .calendar-grid-row:not(:last-child) {
+    //   border-bottom: 1px solid #d2d2d2;
+    // }
     .weekend {
       background-color: #e8e8e8;
     }

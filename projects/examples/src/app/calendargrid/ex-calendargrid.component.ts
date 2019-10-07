@@ -10,7 +10,7 @@ import { calendarGridData } from './calendar-grid-data.stub';
     <h4>No templates (use with primitive value)</h4>
     <cr-calendar-grid [calendarGridData]="calendarGridData"></cr-calendar-grid>
 
-    <hr/>
+    <br/><br/>
 
     <h4>Single template for all rows</h4>
     <cr-calendar-grid [calendarGridData]="calendarGridData">
@@ -24,7 +24,7 @@ import { calendarGridData } from './calendar-grid-data.stub';
       </cr-calendar-grid-row>
     </cr-calendar-grid>
 
-    <hr/>
+    <br/><br/>
 
     <h4>Template for each row</h4>
     <cr-calendar-grid [calendarGridData]="calendarGridData">
