@@ -68,7 +68,7 @@ Note: Change all versions in `package.json` to [caret version](https://www.npmjs
 
 ### examples app
 ```bash
-ng g app examples --style=scss --prefix=cr
+ng g app examples --style=scss --prefix=cr --routing
 ```
 I'm surprised I still need to specify `--style=scss` and `prefix=cr` even though the were added as defaults.
 
