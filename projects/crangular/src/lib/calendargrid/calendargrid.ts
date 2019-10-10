@@ -123,24 +123,6 @@ export class CalendarGridRowDirective {
       </cr-calendar-grid-row>
 
     </ng-container>
-
-    <!--<cr-calendar-grid-row *ngFor="let calendarGridRow of calendarGridData.rows; let i = index" class="calendar-grid-row">
-
-      <!-- if calendarGridRow.node then add caret/expand/collapse template; else standard template --
-
-      <ng-container *ngIf="!calendarGridRow.node">
-        <cr-calendar-grid-label>
-          <ng-container *ngIf="!labelTpl(i)">{{ calendarGridRow.label }}</ng-container>
-          <ng-container *ngTemplateOutlet="labelTpl(i)?.templateRef;context:{label:calendarGridRow.label}"></ng-container>
-        </cr-calendar-grid-label>
-
-        <cr-calendar-grid-cell *ngFor="let calendarCell of calendarGridRow.cells">
-          <ng-container *ngIf="!cellTpl(i)">{{ calendarCell.value }}</ng-container>
-          <ng-container *ngTemplateOutlet="cellTpl(i)?.templateRef;context:{cell:calendarCell}"></ng-container>
-        </cr-calendar-grid-cell>
-      </ng-container>
-
-    </cr-calendar-grid-row>-->
   `,
   styles: [`
     .calendar-grid-row:not(:last-child) {
@@ -153,6 +135,8 @@ export class CalendarGridComponent implements OnChanges {
   @Input() calendarGridData: CalendarGridData;
   @ContentChildren(CalendarGridRowDirective) rows: QueryList<CalendarGridRowDirective>;
   allCalendarGridRows: CalendarGridRow<any>[];
+  rowIndexMap = new Map<number, number>();
+  // TODO change to bitmask to be more efficient.
   visibleRows: Set<number>;
 
   constructor(/* config: CrCalendarGridConfig */) {
@@ -168,16 +152,18 @@ export class CalendarGridComponent implements OnChanges {
     const rows: CalendarGridRow<any>[] = [];
     if (calendarGridData && calendarGridData.rows) {
 
-      let index = 0;
-      calendarGridData.rows.forEach(row => {
+      let totalIndex = 0;
+      calendarGridData.rows.forEach((row, index, array) => {
         rows.push(row);
         this.visibleRows.add(index);
-        index++;
+        this.rowIndexMap.set(totalIndex, index);
+        totalIndex++;
 
         let node = row.node;
         while (node) {
           rows.push(node);
-          index++;
+          this.rowIndexMap.set(totalIndex, index);
+          totalIndex++;
           node = node.node;
         }
       });
@@ -200,10 +186,17 @@ export class CalendarGridComponent implements OnChanges {
   labelTpl(index: number): CalendarGridLabelTplDirective | null {
     let labelTpl: CalendarGridLabelTplDirective | null;
     if (this.rows && this.rows.length === 1) {
-      labelTpl = this.rows.first.labelTpls.first;
+      const row = this.rows.first;
+      // How do we find the correct label?
+      // labelTpl = row.labelTpls.first;
+      labelTpl = row.labelTpls.length === 1
+        ? row.labelTpls.first
+        : row.labelTpls.find((item, idx, array) => idx === this.rowIndexMap.get(index)) || row.labelTpls.last;
     } else if (this.rows && this.rows.length > 1) {
-      const row = this.rows.find((row, idx, rows) => idx === index);
-      labelTpl = row ? row.labelTpls.first : this.rows.last.labelTpls.first;
+      const row = this.rows.find((row, idx, rows) => idx === this.rowIndexMap.get(index)) || this.rows.last;
+      labelTpl = row.labelTpls.length === 1
+        ? row.labelTpls.first
+        : row.labelTpls.find((item, idx, array) => idx === this.rowIndexMap.get(index)) || row.labelTpls.last;
     }
     return labelTpl;
   }
@@ -211,10 +204,17 @@ export class CalendarGridComponent implements OnChanges {
   cellTpl(index: number): CalendarGridCellTplDirective | null {
     let cellTpl: CalendarGridCellTplDirective | null;
     if (this.rows && this.rows.length === 1) {
-      cellTpl = this.rows.first.cellTpls.first;
+      const row = this.rows.first;
+      // How do we find the correct label?
+      // labelTpl = row.labelTpls.first;
+      cellTpl = row.cellTpls.length === 1
+        ? row.cellTpls.first
+        : row.cellTpls.find((item, idx, array) => idx === this.rowIndexMap.get(index)) || row.cellTpls.last;
     } else if (this.rows && this.rows.length > 1) {
-      const row = this.rows.find((row, idx, rows) => idx === index);
-      cellTpl = row ? row.cellTpls.first : this.rows.last.cellTpls.first;
+      const row = this.rows.find((row, idx, rows) => idx === this.rowIndexMap.get(index)) || this.rows.last;
+      cellTpl = row.cellTpls.length === 1
+        ? row.cellTpls.first
+        : row.cellTpls.find((item, idx, array) => idx === this.rowIndexMap.get(index)) || row.cellTpls.last;
     }
     return cellTpl;
   }
