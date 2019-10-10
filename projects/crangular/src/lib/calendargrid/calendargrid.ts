@@ -1,4 +1,4 @@
-import { AfterContentChecked, Component, ContentChildren, Directive, Input, QueryList, TemplateRef, HostBinding } from '@angular/core';
+import { AfterContentChecked, Component, ContentChildren, Directive, Input, QueryList, TemplateRef, HostBinding, OnChanges } from '@angular/core';
 
 export interface CalendarGridCell<T> {
   id: string;
@@ -33,10 +33,7 @@ export class CalendarGridLabelTplDirective {
 @Directive({selector: 'cr-calendar-grid-label'})
 export class CalendarGridLabelElmDirective {
   @HostBinding('class') class = 'col-2';
-  // TODO is there a way to specify multiple styles (similar to class e.g. col d-flex p-0)
   @HostBinding('style.display') display = 'inline-block';
-  // TODO remove, only used for testing
-  // @HostBinding('style.border') border = '1px solid red';
   constructor() { }
 }
 
@@ -59,15 +56,17 @@ export class CalendarGridCellTplDirective {
   `,
   styles: [`
     .calendar-grid-cell {
-      // border: 1px solid blue;
       text-align: center;
-      // https://stackoverflow.com/questions/25066214/flexbox-not-giving-equal-width-to-elements/25066844#25066844
       flex-basis: 0;
     },
+    .weekend {
+      background-color: #e8e8e8;
+    }
   `]
 })
 export class CalendarGridCellComponent {
   @HostBinding('class') class = 'col d-flex p-0';
+  // TODO can we inject the calendarGridCellData model here to calculate .weekend?
   constructor() { }
 }
 
@@ -82,7 +81,8 @@ export class CalendarGridCellComponent {
  * As grid view without last border-bottom, or calendar view with border-bottom?
  */
 @Directive({selector: 'cr-calendar-grid-row'})
-export class CalendarGridRowDirective implements AfterContentChecked {
+export class CalendarGridRowDirective {
+  // TODO calendar-grid-row class is not applied by cr-calendar-grid component when using: ('class') class = 'row';
   @HostBinding('class.row') apply: boolean = true;
   // @HostBinding('style.border-bottom') borderBottom = '1px solid #d2d2d2';
   // :not(:last-child) {
@@ -93,38 +93,8 @@ export class CalendarGridRowDirective implements AfterContentChecked {
   // @HostBinding('style') borderBottom = 'border-bottom: 1px solid rgb(210, 210, 210);'; // FAIL
   // @HostBinding('style.:not(:last-child).border-bottom') borderBottom = '1px solid #d2d2d2'; // fAIL
   // @HostBinding(':not(:last-child).style.border-bottom') borderBottom = '1px solid #d2d2d2'; // FAIL
-
-  labelTpl: CalendarGridLabelTplDirective | null;
-  cellTpl: CalendarGridCellTplDirective | null;
-
   @ContentChildren(CalendarGridLabelTplDirective, {descendants: false}) labelTpls: QueryList<CalendarGridLabelTplDirective>;
   @ContentChildren(CalendarGridCellTplDirective, {descendants: false}) cellTpls: QueryList<CalendarGridCellTplDirective>;
-
-  ngAfterContentChecked() {
-    // We are using @ContentChildren instead of @ContentChild as in the Angular version being used
-    // only @ContentChildren allows us to specify the {descendants: false} option.
-    // Without {descendants: false} we are hitting bugs described in:
-    // https://github.com/ng-bootstrap/ng-bootstrap/issues/2240
-    this.labelTpl = this.labelTpls.first;
-    this.cellTpl = this.cellTpls.first;
-  }
-}
-
-@Component({
-  selector: 'cr-calendar-grid-row',
-  template: `
-    <ng-content select="cr-calendar-grid-label"></ng-content>
-    <ng-content></ng-content>
-  `,
-  styles: [`
-    :host:not(:last-child) {
-     border-bottom: 1px solid #d2d2d2;
-    }
-  `]
-})
-export class CalendarGridRowComponent {
-  @HostBinding('class') row = 'row';
-  constructor() { }
 }
 
 /**
@@ -133,47 +103,107 @@ export class CalendarGridRowComponent {
 @Component({
   selector: 'cr-calendar-grid',
   template: `
-    <cr-calendar-grid-row *ngFor="let calendarGridRow of calendarGridData.rows; let i = index" class="calendar-grid-row">
+    <ng-container *ngFor="let calendarGridRow of allCalendarGridRows; let i = index">
 
-      <cr-calendar-grid-label>
-        <ng-container *ngIf="!labelTpl(i)">{{ calendarGridRow.label }}</ng-container>
-        <ng-container *ngTemplateOutlet="labelTpl(i)?.templateRef;context:{label:calendarGridRow.label}"></ng-container>
-      </cr-calendar-grid-label>
+      <cr-calendar-grid-row *ngIf="isRowVisible(i)" class="calendar-grid-row">
 
-      <cr-calendar-grid-cell *ngFor="let calendarCell of calendarGridRow.cells">
-        <ng-container *ngIf="!cellTpl(i)">{{ calendarCell.value }}</ng-container>
-        <ng-container *ngTemplateOutlet="cellTpl(i)?.templateRef;context:{cell:calendarCell}"></ng-container>
-      </cr-calendar-grid-cell>
+        <span *ngIf="calendarGridRow.node && !isRowVisible(i)" class="ml-3" (click)="toggleRowVisibility(i)">O</span>
+        <span *ngIf="calendarGridRow.node && isRowVisible(i)" class="ml-3" (click)="toggleRowVisibility(i)">X</span>
 
-    </cr-calendar-grid-row>
+        <cr-calendar-grid-label>
+          <ng-container *ngIf="!labelTpl(i)">{{ calendarGridRow.label }}</ng-container>
+          <ng-container *ngTemplateOutlet="labelTpl(i)?.templateRef;context:{label:calendarGridRow.label}"></ng-container>
+        </cr-calendar-grid-label>
+
+        <cr-calendar-grid-cell *ngFor="let calendarCell of calendarGridRow.cells">
+          <ng-container *ngIf="!cellTpl(i)">{{ calendarCell.value }}</ng-container>
+          <ng-container *ngTemplateOutlet="cellTpl(i)?.templateRef;context:{cell:calendarCell}"></ng-container>
+        </cr-calendar-grid-cell>
+
+      </cr-calendar-grid-row>
+
+    </ng-container>
+
+    <!--<cr-calendar-grid-row *ngFor="let calendarGridRow of calendarGridData.rows; let i = index" class="calendar-grid-row">
+
+      <!-- if calendarGridRow.node then add caret/expand/collapse template; else standard template --
+
+      <ng-container *ngIf="!calendarGridRow.node">
+        <cr-calendar-grid-label>
+          <ng-container *ngIf="!labelTpl(i)">{{ calendarGridRow.label }}</ng-container>
+          <ng-container *ngTemplateOutlet="labelTpl(i)?.templateRef;context:{label:calendarGridRow.label}"></ng-container>
+        </cr-calendar-grid-label>
+
+        <cr-calendar-grid-cell *ngFor="let calendarCell of calendarGridRow.cells">
+          <ng-container *ngIf="!cellTpl(i)">{{ calendarCell.value }}</ng-container>
+          <ng-container *ngTemplateOutlet="cellTpl(i)?.templateRef;context:{cell:calendarCell}"></ng-container>
+        </cr-calendar-grid-cell>
+      </ng-container>
+
+    </cr-calendar-grid-row>-->
   `,
   styles: [`
     .calendar-grid-row:not(:last-child) {
       border-bottom: 1px solid #d2d2d2;
     }
-    .weekend {
-      background-color: #e8e8e8;
-    }
   `]
 })
-export class CalendarGridComponent {
+export class CalendarGridComponent implements OnChanges {
 
   @Input() calendarGridData: CalendarGridData;
   @ContentChildren(CalendarGridRowDirective) rows: QueryList<CalendarGridRowDirective>;
+  allCalendarGridRows: CalendarGridRow<any>[];
+  visibleRows: Set<number>;
 
-  constructor(/* config: NgbTabsetConfig */) {
+  constructor(/* config: CrCalendarGridConfig */) {
     // this.type = config.type;
-    // this.justify = config.justify;
-    // this.orientation = config.orientation;
+  }
+
+  ngOnChanges(): void {
+    this.visibleRows = new Set<number>();
+    this.allCalendarGridRows = this.extractAllRows(this.calendarGridData);
+  }
+
+  extractAllRows(calendarGridData: CalendarGridData): CalendarGridRow<any>[] {
+    const rows: CalendarGridRow<any>[] = [];
+    if (calendarGridData && calendarGridData.rows) {
+
+      let index = 0;
+      calendarGridData.rows.forEach(row => {
+        rows.push(row);
+        this.visibleRows.add(index);
+        index++;
+
+        let node = row.node;
+        while (node) {
+          rows.push(node);
+          index++;
+          node = node.node;
+        }
+      });
+    }
+    return rows;
+  }
+
+  isRowVisible(idx: number): boolean {
+    return this.visibleRows.has(idx);
+  }
+
+  toggleRowVisibility(idx: number): void {
+    if (this.visibleRows.has(idx)) {
+      this.visibleRows.delete(idx);
+    } else {
+      this.visibleRows.add(idx);
+    }
   }
 
   labelTpl(index: number): CalendarGridLabelTplDirective | null {
     let labelTpl: CalendarGridLabelTplDirective | null;
     if (this.rows && this.rows.length === 1) {
-      labelTpl = this.rows.first.labelTpl;
+      labelTpl = this.rows.first.labelTpls.first;
     } else if (this.rows && this.rows.length > 1) {
       const row = this.rows.find((row, idx, rows) => idx === index);
-      labelTpl = row ? row.labelTpl : this.rows.last.labelTpl;
+      labelTpl = row ? row.labelTpls.first : this.rows.last.labelTpls.first;
     }
     return labelTpl;
   }
@@ -181,10 +211,10 @@ export class CalendarGridComponent {
   cellTpl(index: number): CalendarGridCellTplDirective | null {
     let cellTpl: CalendarGridCellTplDirective | null;
     if (this.rows && this.rows.length === 1) {
-      cellTpl = this.rows.first.cellTpl;
+      cellTpl = this.rows.first.cellTpls.first;
     } else if (this.rows && this.rows.length > 1) {
       const row = this.rows.find((row, idx, rows) => idx === index);
-      cellTpl = row ? row.cellTpl : this.rows.last.cellTpl;
+      cellTpl = row ? row.cellTpls.first : this.rows.last.cellTpls.first;
     }
     return cellTpl;
   }
