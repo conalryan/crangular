@@ -1,4 +1,4 @@
-import { AfterContentChecked, Component, ContentChildren, Directive, Input, QueryList, TemplateRef, HostBinding, OnChanges } from '@angular/core';
+import { Component, ContentChildren, Directive, HostBinding, Input, OnChanges, QueryList, TemplateRef } from '@angular/core';
 
 export interface CalendarGridCell<T> {
   id: string;
@@ -82,7 +82,7 @@ export class CalendarGridCellComponent {
  */
 @Directive({selector: 'cr-calendar-grid-row'})
 export class CalendarGridRowDirective {
-  // TODO calendar-grid-row class is not applied by cr-calendar-grid component when using: ('class') class = 'row';
+  // TODO calendar-grid-row class is not applied by cr-calendar-grid component when using: ('class') class = 'row'; why not?
   @HostBinding('class.row') apply: boolean = true;
   // @HostBinding('style.border-bottom') borderBottom = '1px solid #d2d2d2';
   // :not(:last-child) {
@@ -98,7 +98,7 @@ export class CalendarGridRowDirective {
 }
 
 /**
- * A component that makes it easy to create tabbed interface.
+ * A component that makes it easy to create equal sized columns.
  */
 @Component({
   selector: 'cr-calendar-grid',
@@ -107,8 +107,8 @@ export class CalendarGridRowDirective {
 
       <cr-calendar-grid-row *ngIf="isRowVisible(i)" class="calendar-grid-row">
 
-        <span *ngIf="calendarGridRow.node && !isRowVisible(i)" class="ml-3" (click)="toggleRowVisibility(i)">O</span>
-        <span *ngIf="calendarGridRow.node && isRowVisible(i)" class="ml-3" (click)="toggleRowVisibility(i)">X</span>
+        <span *ngIf="calendarGridRow.node && !isRowVisible(i + 1)" class="ml-3" (click)="toggleRowVisibility(i + 1)">O</span>
+        <span *ngIf="calendarGridRow.node && isRowVisible(i + 1)" class="ml-3" (click)="toggleRowVisibility(i + 1)">X</span>
 
         <cr-calendar-grid-label>
           <ng-container *ngIf="!labelTpl(i)">{{ calendarGridRow.label }}</ng-container>
@@ -136,7 +136,7 @@ export class CalendarGridComponent implements OnChanges {
   @ContentChildren(CalendarGridRowDirective) rows: QueryList<CalendarGridRowDirective>;
   allCalendarGridRows: CalendarGridRow<any>[];
   rowIndexMap = new Map<number, number>();
-  // TODO change to bitmask to be more efficient.
+  // TODO change to bitmask to be more efficient as number is 64bit precision.
   visibleRows: Set<number>;
 
   constructor(/* config: CrCalendarGridConfig */) {
@@ -155,7 +155,7 @@ export class CalendarGridComponent implements OnChanges {
       let totalIndex = 0;
       calendarGridData.rows.forEach((row, index, array) => {
         rows.push(row);
-        this.visibleRows.add(index);
+        this.visibleRows.add(totalIndex);
         this.rowIndexMap.set(totalIndex, index);
         totalIndex++;
 
