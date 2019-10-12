@@ -74,21 +74,6 @@ export const calendarGridData = (): CalendarGridData => {
   };
 };
 
-// export const calendarGridNestedData = (): CalendarGridData => {
-//   const rows = calendarGridRows();
-//   rows.forEach((value, index, array) => {
-//     if (1 === index) {
-//       value.node = {...rows[1]};
-//     } else if (2 === index) {
-//       value.node = {...rows[1]};
-//       value.node.node = {...rows[2]};
-//     }
-//   });
-//   return {
-//     rows: rows
-//   };
-// };
-
 export const calendarGridSingleNestRows = (): CalendarGridRow<any>[] => {
   return [
     {
@@ -124,5 +109,55 @@ export const calendarGridSingleNestRows = (): CalendarGridRow<any>[] => {
 export const calendarGridNestedData = (): CalendarGridData => {
   return {
     rows: calendarGridSingleNestRows()
+  };
+};
+
+export const calendarGridDoubleNestRows = (): CalendarGridRow<any>[] => {
+  return [
+    {
+      label: 'Row 1',
+      cells: strCells(),
+      node: {
+        label: 'Sub 1 a',
+        cells: strCells(),
+        node: {
+          label: 'Sub Sub 1 a 1',
+          cells: strCells(),
+          node: undefined
+        }
+      }
+    },
+    {
+      label: 'Row 2',
+      cells: numCells(),
+      node: {
+        label: 'Sub 2 a',
+        cells: numCells(),
+        node: {
+          label: 'Sub Sub 2 a 1',
+          cells: numCells(),
+          node: undefined
+        }
+      }
+    },
+    {
+      label: 'Row 3',
+      cells: boolCells(),
+      node: {
+        label: 'Sub 3 a',
+        cells: numCells(),
+        node: {
+          label: 'Sub Sub 3 a 1',
+          cells: numCells(),
+          node: undefined
+        }
+      }
+    }
+  ];
+};
+
+export const calendarGridDoubleNestedData = (): CalendarGridData => {
+  return {
+    rows: calendarGridDoubleNestRows()
   };
 };
