@@ -33,9 +33,26 @@ export class CalendarGridLabelTplDirective {
 @Directive({selector: 'cr-calendar-grid-label'})
 export class CalendarGridLabelElmDirective {
   // pl-1 = 0.25rem; pl-2 = 0.5rem; pl-3 = 1rem;
-  @HostBinding('class') class = 'col-2 pl-2 pr-2';
-  @HostBinding('style.display') display = 'inline-block';
-  @HostBinding('class.border') border = '1px solid #d2d2d2;'
+  // @HostBinding('class') class = 'col-2 pl-2 pr-2 !default;';
+  // @HostBinding('style.display') display = 'inline-block';
+  // @HostBinding('class.border') border = '1px solid #d2d2d2;';
+
+
+  // @HostBinding('class.valid') get valid() { return this.control.valid; }
+  @HostBinding('class') get class() {
+    return 'col-2';
+  }
+
+  defaultStyle = {
+    one: 'two',
+    display: 'inline-block',
+    border: '1px solid #d2d2d2',
+    'padding-left': '0.5rem',
+    'padding-right': '0.5rem',
+  };
+
+  @HostBinding('style') get style() { return this.defaultStyle; }
+
   constructor() { }
 }
 
@@ -50,8 +67,9 @@ export class CalendarGridCellTplDirective {
 @Component({
   selector: 'cr-calendar-grid-cell',
   template: `
-    <!-- TODO is there another way?
-    Not crazy about client content wrapped in div, wrapped in cr-calendar-grid-cell. Can we remove a level? -->
+    <!-- TODO better alternative?
+    Not crazy about client content wrapped in div, wrapped in cr-calendar-grid-cell. Can we remove a level?
+    Note: css classes on div and host -->
     <div class="flex-grow-1 calendar-grid-cell">
       <ng-content></ng-content>
     </div>
@@ -74,33 +92,20 @@ export class CalendarGridCellComponent {
 
 /**
  * A directive representing an individual row.
- * TODO how can we apply?
- * :not(:last-child) {
- *    border-bottom: 1px solid #d2d2d2;
- * }
- * Right now, cr-calendar-grid is applying it.
- * What is the most common use case?
- * As grid view without last border-bottom, or calendar view with border-bottom?
  */
 @Directive({selector: 'cr-calendar-grid-row'})
 export class CalendarGridRowDirective {
-  // TODO calendar-grid-row class is not applied by cr-calendar-grid component when using: ('class') class = 'row'; why not?
   @HostBinding('class') row = 'row mr-0 ml-0';
-  // @HostBinding('style.border-bottom') borderBottom = '1px solid #d2d2d2';
-  // :not(:last-child) {
-  //     border-bottom: 1px solid #d2d2d2;
-  //   }
-  // @HostBinding('style.border-bottom') borderBottom = '1px solid #d2d2d2'; // SUCCESS
-  // @HostBinding('style.border-bottom: 1px solid rgb(210, 210, 210);') borderBottom = true; // FAIL
-  // @HostBinding('style') borderBottom = 'border-bottom: 1px solid rgb(210, 210, 210);'; // FAIL
-  // @HostBinding('style.:not(:last-child).border-bottom') borderBottom = '1px solid #d2d2d2'; // fAIL
-  // @HostBinding(':not(:last-child).style.border-bottom') borderBottom = '1px solid #d2d2d2'; // FAIL
   @ContentChildren(CalendarGridLabelTplDirective, {descendants: false}) labelTpls: QueryList<CalendarGridLabelTplDirective>;
   @ContentChildren(CalendarGridCellTplDirective, {descendants: false}) cellTpls: QueryList<CalendarGridCellTplDirective>;
 }
 
 /**
- * A component that makes it easy to create equal sized columns.
+ * Uses:
+ * - CalendarGridRowDirective,
+ * - CalendarGridLabelElmDirective,
+ * - CalendarGridCellTplDirective,
+ * - CalendarGridCellComponent to create equal sized columns.
  */
 @Component({
   selector: 'cr-calendar-grid',
@@ -109,7 +114,7 @@ export class CalendarGridRowDirective {
 
       <cr-calendar-grid-row *ngIf="isRowVisible(i)" class="calendar-grid-row">
 
-        <cr-calendar-grid-label>
+        <cr-calendar-grid-label [ngStyle]="{'padding-left': paddingOffset(i)}">
           <span [ngStyle]="{'padding-left': paddingOffset(i)}" class="pr-2" *ngIf="calendarGridRow.node && !isRowVisible(i + 1)" (click)="toggleRowVisibility(i + 1)">O</span>
           <span [ngStyle]="{'padding-left': paddingOffset(i)}"  class="pr-2" *ngIf="calendarGridRow.node && isRowVisible(i + 1)" (click)="toggleRowVisibility(i + 1)">X</span>
 
@@ -147,10 +152,10 @@ export class CalendarGridComponent implements OnChanges {
 
   ngOnChanges(): void {
     this.visibleRows = new Set<number>();
-    this.allCalendarGridRows = this.extractAllRows(this.calendarGridData);
+    this.allCalendarGridRows = this.allRows(this.calendarGridData);
   }
 
-  extractAllRows(calendarGridData: CalendarGridData): CalendarGridRow<any>[] {
+  allRows(calendarGridData: CalendarGridData): CalendarGridRow<any>[] {
     const rows: CalendarGridRow<any>[] = [];
     if (calendarGridData && calendarGridData.rows) {
 
@@ -205,7 +210,7 @@ export class CalendarGridComponent implements OnChanges {
     });
   }
 
-  findRowByIndex(index: number): CalendarGridRowDirective {
+  row(index: number): CalendarGridRowDirective {
     let row: CalendarGridRowDirective;
     if (this.rows && this.rows.length === 1) {
       row = this.rows.first;
@@ -215,9 +220,9 @@ export class CalendarGridComponent implements OnChanges {
     return row;
   }
 
-  template(index: number, templates: string): CalendarGridLabelTplDirective | CalendarGridLabelTplDirective | null {
+  template(index: number, templates: string): CalendarGridLabelTplDirective | CalendarGridCellTplDirective | null {
     let template: CalendarGridLabelTplDirective | CalendarGridLabelTplDirective | null;
-    const row = this.findRowByIndex(index);
+    const row = this.row(index);
     if (row[templates].length === 1) {
       // Client is iterating over a single template
       template = row[templates].first;
@@ -229,63 +234,6 @@ export class CalendarGridComponent implements OnChanges {
     }
     return template;
   }
-
-
-  // labelTpl(index: number): CalendarGridLabelTplDirective | null {
-  //   let labelTpl: CalendarGridLabelTplDirective | null;
-  //   if (this.rows && this.rows.length === 1) {
-  //     const row = this.rows.first;
-  //     labelTpl = row.labelTpls.length === 1
-  //       ? row.labelTpls.first
-  //       : row.labelTpls.find((item, idx, array) => {
-  //         return idx === (this.rowIndexMap.get(index) && this.rowIndexMap.get(index).parent) || row.labelTpls.last;
-  //       });
-  //   } else if (this.rows && this.rows.length > 1) {
-  //     const row = this.rows.find((row, idx, rows) => {
-  //       if (this.rowIndexMap.get(index)) {
-  //         return idx === this.rowIndexMap.get(index).parent || this.rows.last;
-  //       }
-  //       return this.rows.last;
-  //     });
-  //     labelTpl = row.labelTpls.length === 1
-  //       ? row.labelTpls.first
-  //       : row.labelTpls.find((item, idx, array) => {
-  //         return idx === (this.rowIndexMap.get(index) && this.rowIndexMap.get(index).parent) || row.labelTpls.last;
-  //       });
-  //   }
-  //   return labelTpl;
-  // }
-
-  // cellTpl(index: number): CalendarGridCellTplDirective | null {
-  //   let cellTpl: CalendarGridCellTplDirective | null;
-  //   if (this.rows && this.rows.length === 1) {
-  //     const row = this.rows.first;
-  //     cellTpl = row.cellTpls.length === 1
-  //       ? row.cellTpls.first
-  //       : row.cellTpls.find((item, idx, array) => {
-  //         if (this.rowIndexMap.get(index) {
-  //           return idx ===  this.rowIndexMap.get(index).parent || row.cellTpls.last;
-  //         }
-  //         return row.cellTpls.last;
-  //       });
-  //   } else if (this.rows && this.rows.length > 1) {
-  //     const row = this.rows.find((row, idx, rows) => {
-  //       if (this.rowIndexMap.get(index) {
-  //         return idx === this.rowIndexMap.get(index).parent || this.rows.last;
-  //       }
-  //       return this.rows.last;
-  //     });
-  //     cellTpl = row.cellTpls.length === 1
-  //       ? row.cellTpls.first
-  //       : row.cellTpls.find((item, idx, array) => {
-  //         if (this.rowIndexMap.get(index)) {
-  //           return idx === this.rowIndexMap.get(index).parent || row.cellTpls.last;
-  //         }
-  //         return this.rowIndexMap.get(index);
-  //     });
-  //   }
-  //   return cellTpl;
-  // }
 
   paddingOffset(index: number): string {
     const parentOffset = this.rowIndexMap.get(index).offset;
