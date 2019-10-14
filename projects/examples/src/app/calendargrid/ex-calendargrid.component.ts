@@ -108,7 +108,7 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
       </cr-calendar-grid-row>
     </cr-calendar-grid>-->
 
-    <br/><br/>
+    <!--<br/><br/>
 
     <h3>Double Nested Data</h3>
     <h4>No templates (use with primitive value)</h4>
@@ -121,6 +121,57 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
       <cr-calendar-grid-row>
         <ng-template crCalendarGridLabel let-l="label">
           {{ l }}
+        </ng-template>
+        <ng-template crCalendarGridCell let-c="cell">
+          {{ c?.value }}
+        </ng-template>
+      </cr-calendar-grid-row>
+    </cr-calendar-grid>
+
+    <br/><br/>
+
+    <h4>Template for each row</h4>
+    <cr-calendar-grid [calendarGridData]="calendarGridDoubleNestedData">
+      <cr-calendar-grid-row>
+        <ng-template crCalendarGridLabel let-l="label">
+          {{ l }}
+        </ng-template>
+        <ng-template crCalendarGridCell let-c="cell">
+          {{ c?.value }}
+        </ng-template>
+      </cr-calendar-grid-row>
+
+      <cr-calendar-grid-row>
+        <ng-template crCalendarGridLabel let-l="label">
+          {{ l }}
+        </ng-template>
+        <ng-template crCalendarGridCell let-c="cell">
+          {{ c?.value }}
+        </ng-template>
+      </cr-calendar-grid-row>
+
+      <cr-calendar-grid-row>
+        <ng-template crCalendarGridLabel let-l="label">
+          {{ l }}
+        </ng-template>
+        <ng-template crCalendarGridCell let-c="cell">
+          <span *ngIf="c?.value">TRUE</span>
+        </ng-template>
+      </cr-calendar-grid-row>
+    </cr-calendar-grid>-->
+
+    <br/><br/>
+
+    <h3>Double Nested Data: Experimenting with multi label/cells per row</h3>
+
+    <h4>Two labels per row</h4>
+    <cr-calendar-grid [calendarGridData]="calendarGridDoubleNestedData">
+      <cr-calendar-grid-row>
+        <ng-template crCalendarGridLabel let-l="label">
+          <span>First: {{ l }}</span>
+        </ng-template>
+        <ng-template crCalendarGridLabel let-l="label">
+          <span>Second: {{ l }}</span>
         </ng-template>
         <ng-template crCalendarGridCell let-c="cell">
           {{ c?.value }}

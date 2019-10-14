@@ -81,7 +81,7 @@ export const calendarGridSingleNestRows = (): CalendarGridRow<any>[] => {
       cells: strCells(),
       node: {
         label: 'Sub 1 a',
-        cells: strCells(),
+        cells: numCells(),
         node: undefined
       }
     },
@@ -90,7 +90,7 @@ export const calendarGridSingleNestRows = (): CalendarGridRow<any>[] => {
       cells: numCells(),
       node: {
         label: 'Sub 2 a',
-        cells: numCells(),
+        cells: boolCells(),
         node: undefined
       }
     },
@@ -99,7 +99,7 @@ export const calendarGridSingleNestRows = (): CalendarGridRow<any>[] => {
       cells: boolCells(),
       node: {
         label: 'Sub 3 a',
-        cells: numCells(),
+        cells: strCells(),
         node: undefined
       }
     }
@@ -119,36 +119,36 @@ export const calendarGridDoubleNestRows = (): CalendarGridRow<any>[] => {
       cells: strCells(),
       node: {
         label: 'Sub 1 a',
-        cells: strCells(),
+        cells: numCells(),
         node: {
           label: 'Sub Sub 1 a 1',
-          cells: strCells(),
+          cells: boolCells(),
           node: undefined
         }
       }
     },
     {
       label: 'Row 2',
-      cells: numCells(),
+      cells: strCells(),
       node: {
         label: 'Sub 2 a',
         cells: numCells(),
         node: {
           label: 'Sub Sub 2 a 1',
-          cells: numCells(),
+          cells: boolCells(),
           node: undefined
         }
       }
     },
     {
       label: 'Row 3',
-      cells: boolCells(),
+      cells: strCells(),
       node: {
         label: 'Sub 3 a',
         cells: numCells(),
         node: {
           label: 'Sub Sub 3 a 1',
-          cells: numCells(),
+          cells: boolCells(),
           node: undefined
         }
       }
