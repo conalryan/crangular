@@ -14,14 +14,15 @@ export interface CalendarGridRow<T> {
 
 /**
  * Wrapper object to contain data and config.
- * Expectation: Additional fields will be required e.g. preferences, flags, etc.
+ * Expectation: Additional fields will be added/required e.g. preferences, flags, etc.
  */
 export interface CalendarGridData {
   rows: CalendarGridRow<any>[];
 }
 
 /**
- * A directive to wrap row labels that need to contain HTML markup or other directives.
+ * A directive to wrap content to be displayed as the row label.
+ * Exposes TemplateRef that can be used to project content.
  */
 @Directive({selector: 'ng-template[crCalendarGridLabel]'})
 export class CalendarGridLabelTplDirective {
@@ -29,7 +30,7 @@ export class CalendarGridLabelTplDirective {
 }
 
 /**
- * Simple directive to add common styling
+ * Simple element directive to add common styling
  */
 @Directive({selector: 'cr-calendar-grid-label'})
 export class CalendarGridLabelElmDirective {
@@ -39,18 +40,30 @@ export class CalendarGridLabelElmDirective {
 
 /**
  * A directive to wrap content to be displayed in a cell.
+ * Exposes TemplateRef that can be used to project content.
  */
 @Directive({selector: 'ng-template[crCalendarGridCell]'})
 export class CalendarGridCellTplDirective {
   constructor(public templateRef: TemplateRef<any>) {}
 }
 
+/**
+ * A directive representing an individual row.
+ * Adds common styling and exposes label and cell templates.
+ */
+@Directive({selector: 'cr-calendar-grid-row'})
+export class CalendarGridRowDirective {
+  @HostBinding('class') row = 'row mr-0 ml-0';
+  @ContentChildren(CalendarGridLabelTplDirective, {descendants: false}) labelTpls: QueryList<CalendarGridLabelTplDirective>;
+  @ContentChildren(CalendarGridCellTplDirective, {descendants: false}) cellTpls: QueryList<CalendarGridCellTplDirective>;
+}
+
+/**
+ * Component that wraps client content and applies common styling to create equal sized columns.
+ */
 @Component({
   selector: 'cr-calendar-grid-cell',
   template: `
-    <!-- TODO better alternative?
-    Not crazy about client content wrapped in div, wrapped in cr-calendar-grid-cell. Can we remove a level?
-    Note: css classes on div and host -->
     <div class="flex-grow-1 calendar-grid-cell">
       <ng-content></ng-content>
     </div>
@@ -71,27 +84,15 @@ export class CalendarGridCellComponent {
   constructor() { }
 }
 
-/**
- * A directive representing an individual row.
- */
-@Directive({selector: 'cr-calendar-grid-row'})
-export class CalendarGridRowDirective {
-  @HostBinding('class') row = 'row mr-0 ml-0';
-  @ContentChildren(CalendarGridLabelTplDirective, {descendants: false}) labelTpls: QueryList<CalendarGridLabelTplDirective>;
-  @ContentChildren(CalendarGridCellTplDirective, {descendants: false}) cellTpls: QueryList<CalendarGridCellTplDirective>;
-}
-
 @Component({
   selector: 'cr-calendar-grid',
   template: `
     <ng-container *ngFor="let calendarGridRow of allCalendarGridRows; let i = index">
-
       <cr-calendar-grid-row *ngIf="isRowVisible(i)" class="calendar-grid-row" [ngStyle]="{'padding-left': paddingOffset(i)}">
 
         <cr-calendar-grid-label>
           <span *ngIf="calendarGridRow.node && !isRowVisible(i + 1)" class="pr-2" (click)="toggleRowVisibility(i + 1)">O</span>
           <span *ngIf="calendarGridRow.node && isRowVisible(i + 1)" class="pr-2" (click)="toggleRowVisibility(i + 1)">X</span>
-
           <ng-container *ngIf="!template(i, 'labelTpls')">{{ calendarGridRow.label }}</ng-container>
           <ng-container *ngTemplateOutlet="template(i, 'labelTpls')?.templateRef;context:{label:calendarGridRow.label}"></ng-container>
         </cr-calendar-grid-label>
@@ -102,7 +103,6 @@ export class CalendarGridRowDirective {
         </cr-calendar-grid-cell>
 
       </cr-calendar-grid-row>
-
     </ng-container>
   `,
   styles: [`
@@ -117,12 +117,14 @@ export class CalendarGridComponent implements OnChanges {
   @ContentChildren(CalendarGridRowDirective) rows: QueryList<CalendarGridRowDirective>;
   allCalendarGridRows: CalendarGridRow<any>[];
   rowIndexMap = new Map<number, {parent: number, offset: number}>();
+
   // TODO change to bitmask to be more efficient as number is 64bit precision.
+  // After an update we need to maintain the list of visible rows.
+  // Option1: Pass in visibleRows so parent can control what is visible.
+  // Option2: Don't reset visible rows with ngOnChanges.
   visibleRows: Set<number>;
 
-  constructor(/* config: CrCalendarGridConfig */) {
-    // this.type = config.type;
-  }
+  constructor() {}
 
   ngOnChanges(): void {
     this.visibleRows = new Set<number>();
@@ -132,15 +134,15 @@ export class CalendarGridComponent implements OnChanges {
   allRows(calendarGridData: CalendarGridData): CalendarGridRow<any>[] {
     const rows: CalendarGridRow<any>[] = [];
     if (calendarGridData && calendarGridData.rows) {
-
       let totalIndex = 0;
       calendarGridData.rows.forEach((row, index, array) => {
+        // Parent Row
         let offsetFromParent = 0;
         rows.push(row);
         this.visibleRows.add(totalIndex);
         this.rowIndexMap.set(totalIndex, {parent: index, offset: offsetFromParent});
         totalIndex++;
-
+        // Loop nested rows (i.e. children and grandchildren...)
         let node = row.node;
         while (node) {
           offsetFromParent++;
@@ -164,13 +166,11 @@ export class CalendarGridComponent implements OnChanges {
    * Closing rows requires checking if there are any children that also need to be closed.
    */
   toggleRowVisibility(index: number): void {
-
     // Expand a row
     if (!this.visibleRows.has(index)) {
       this.visibleRows.add(index);
       return;  // Nothing else to do, exit.
     }
-
     // Collapse a row and it's children
     const rowMap = this.rowIndexMap.get(index);
     // Loop rows to find the same parent and parentOffset > rowMap.offset (i.e. if the offset is bigger it's a child);
@@ -210,6 +210,13 @@ export class CalendarGridComponent implements OnChanges {
     return template;
   }
 
+  /**
+   * Apply padding based on the offset from the parent.
+   * ex.
+   * parentRow
+   *   childRow
+   *     grandChildRow
+   */
   paddingOffset(index: number): string {
     const parentOffset = this.rowIndexMap.get(index).offset;
     return `${parentOffset}rem`;
