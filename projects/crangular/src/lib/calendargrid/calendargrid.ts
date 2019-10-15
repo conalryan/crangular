@@ -1,4 +1,5 @@
 import { Component, ContentChildren, Directive, HostBinding, Input, OnChanges, QueryList, TemplateRef } from '@angular/core';
+import { SafeStyle, DomSanitizer } from '@angular/platform-browser';
 
 export interface CalendarGridCell<T> {
   id: string;
@@ -32,28 +33,8 @@ export class CalendarGridLabelTplDirective {
  */
 @Directive({selector: 'cr-calendar-grid-label'})
 export class CalendarGridLabelElmDirective {
-  // pl-1 = 0.25rem; pl-2 = 0.5rem; pl-3 = 1rem;
-  // @HostBinding('class') class = 'col-2 pl-2 pr-2 !default;';
-  // @HostBinding('style.display') display = 'inline-block';
-  // @HostBinding('class.border') border = '1px solid #d2d2d2;';
-
-
-  // @HostBinding('class.valid') get valid() { return this.control.valid; }
-  @HostBinding('class') get class() {
-    return 'col-2';
-  }
-
-  defaultStyle = {
-    one: 'two',
-    display: 'inline-block',
-    border: '1px solid #d2d2d2',
-    'padding-left': '0.5rem',
-    'padding-right': '0.5rem',
-  };
-
-  @HostBinding('style') get style() { return this.defaultStyle; }
-
-  constructor() { }
+  @HostBinding('class') class = 'col-2 pl-2 pr-2';
+  constructor() {}
 }
 
 /**
@@ -100,23 +81,16 @@ export class CalendarGridRowDirective {
   @ContentChildren(CalendarGridCellTplDirective, {descendants: false}) cellTpls: QueryList<CalendarGridCellTplDirective>;
 }
 
-/**
- * Uses:
- * - CalendarGridRowDirective,
- * - CalendarGridLabelElmDirective,
- * - CalendarGridCellTplDirective,
- * - CalendarGridCellComponent to create equal sized columns.
- */
 @Component({
   selector: 'cr-calendar-grid',
   template: `
     <ng-container *ngFor="let calendarGridRow of allCalendarGridRows; let i = index">
 
-      <cr-calendar-grid-row *ngIf="isRowVisible(i)" class="calendar-grid-row">
+      <cr-calendar-grid-row *ngIf="isRowVisible(i)" class="calendar-grid-row" [ngStyle]="{'padding-left': paddingOffset(i)}">
 
-        <cr-calendar-grid-label [ngStyle]="{'padding-left': paddingOffset(i)}">
-          <span [ngStyle]="{'padding-left': paddingOffset(i)}" class="pr-2" *ngIf="calendarGridRow.node && !isRowVisible(i + 1)" (click)="toggleRowVisibility(i + 1)">O</span>
-          <span [ngStyle]="{'padding-left': paddingOffset(i)}"  class="pr-2" *ngIf="calendarGridRow.node && isRowVisible(i + 1)" (click)="toggleRowVisibility(i + 1)">X</span>
+        <cr-calendar-grid-label>
+          <span *ngIf="calendarGridRow.node && !isRowVisible(i + 1)" class="pr-2" (click)="toggleRowVisibility(i + 1)">O</span>
+          <span *ngIf="calendarGridRow.node && isRowVisible(i + 1)" class="pr-2" (click)="toggleRowVisibility(i + 1)">X</span>
 
           <ng-container *ngIf="!template(i, 'labelTpls')">{{ calendarGridRow.label }}</ng-container>
           <ng-container *ngTemplateOutlet="template(i, 'labelTpls')?.templateRef;context:{label:calendarGridRow.label}"></ng-container>
@@ -171,7 +145,7 @@ export class CalendarGridComponent implements OnChanges {
         while (node) {
           offsetFromParent++;
           rows.push(node);
-          // Intentional: Don't add nested rows to this.visibleRows by default
+          // Intentional: Don't add nested rows to this.visibleRows. By default they will be closed/collapsed
           this.rowIndexMap.set(totalIndex, {parent: index, offset: offsetFromParent});
           totalIndex++;
           node = node.node;
@@ -188,19 +162,18 @@ export class CalendarGridComponent implements OnChanges {
   /**
    * Adding a row is quick, check if the row is visible, if not, add it and exit.
    * Closing rows requires checking if there are any children that also need to be closed.
-   * @param index
    */
   toggleRowVisibility(index: number): void {
 
-    // Add/exapnd a row
+    // Expand a row
     if (!this.visibleRows.has(index)) {
       this.visibleRows.add(index);
       return;  // Nothing else to do, exit.
     }
 
-    // Close a row and it's children
+    // Collapse a row and it's children
     const rowMap = this.rowIndexMap.get(index);
-    // Loop rows to find the same parent and parentOffset > rowMap.offset;
+    // Loop rows to find the same parent and parentOffset > rowMap.offset (i.e. if the offset is bigger it's a child);
     this.rowIndexMap.forEach((value, key, map) => {
       if (key === index || (key > index && rowMap.parent === value.parent)) {
         if (this.visibleRows.has(key)) {
@@ -213,15 +186,17 @@ export class CalendarGridComponent implements OnChanges {
   row(index: number): CalendarGridRowDirective {
     let row: CalendarGridRowDirective;
     if (this.rows && this.rows.length === 1) {
+      // Client is iterating over a row
       row = this.rows.first;
     } else if (this.rows && this.rows.length > 1) {
+      // Find the parent row that matches the index or default to the last row
       row = this.rows.find((row, idx, rows) => this.rowIndexMap.get(index) && idx === this.rowIndexMap.get(index).parent) || this.rows.last;
     }
     return row;
   }
 
   template(index: number, templates: string): CalendarGridLabelTplDirective | CalendarGridCellTplDirective | null {
-    let template: CalendarGridLabelTplDirective | CalendarGridLabelTplDirective | null;
+    let template: CalendarGridLabelTplDirective | CalendarGridCellTplDirective | null;
     const row = this.row(index);
     if (row[templates].length === 1) {
       // Client is iterating over a single template
