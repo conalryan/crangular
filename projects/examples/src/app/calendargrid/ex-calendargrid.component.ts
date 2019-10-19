@@ -165,8 +165,13 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
     <h3>Double Nested Data: Experimenting with multi label/cells per row</h3>
 
     <h4>Two labels per row</h4>
+    <br/><br/>
     <cr-calendar-grid [calendarGridData]="calendarGridDoubleNestedData">
-      <cr-calendar-grid-row>
+      <cr-calendar-grid-row [ngStyle]="{
+    'background-color': 'blue',
+    'font-size': '20px',
+    'font-weight': 'bold'
+  }">
         <ng-template crCalendarGridLabel let-l="label">
           <span>First: {{ l }}</span>
         </ng-template>
@@ -181,7 +186,8 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
 
     <br/><br/>
 
-    <h4>Template for each row</h4>
+    <!--<h4>Template for each row</h4>
+    <br/><br/>
     <cr-calendar-grid [calendarGridData]="calendarGridDoubleNestedData">
       <cr-calendar-grid-row>
         <ng-template crCalendarGridLabel let-l="label">
@@ -213,6 +219,7 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
 
 
     <h4>Template for each row Calendar Grid Class</h4>
+    <br/><br/>
     <cr-calendar-grid-class [calendarGridData]="calendarGridDoulbeNestedDataClass">
       <cr-calendar-grid-row>
         <ng-template crCalendarGridLabel let-l="label">
@@ -240,7 +247,7 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
           <span *ngIf="c?.value">TRUE</span>
         </ng-template>
       </cr-calendar-grid-row>
-    </cr-calendar-grid-class>
+    </cr-calendar-grid-class>-->
   `,
   styles: [`
 
@@ -257,7 +264,7 @@ export class ExCalendargridComponent {
   calendarGridDoulbeNestedDataClass: CalendarGridDataClass = new CalendarGridDataClass(calendarGridDoubleNestedData().rows);
 
   constructor() {
-    console.log(this.calendarGridDoubleNestedData);
-    console.log(this.calendarGridDoulbeNestedDataClass);
+    // console.log(this.calendarGridDoubleNestedData);
+    // console.log(this.calendarGridDoulbeNestedDataClass);
    }
 }

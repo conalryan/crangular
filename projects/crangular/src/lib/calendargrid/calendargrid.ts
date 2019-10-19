@@ -15,7 +15,9 @@ export class CalendarGridLabelTplDirective {
  */
 @Directive({selector: 'cr-calendar-grid-label'})
 export class CalendarGridLabelElmDirective {
-  @HostBinding('class') class = 'col-2';
+  // NOTE: List classes individually rather than combined e.g. @HostBinding('class') class = 'row mr-o ml-0';
+  // Listing individually allows client to add classes @see CalendarGridComponent styles
+  @HostBinding('class.col-2') col = 'col-2';
   constructor() {}
 }
 
@@ -34,7 +36,11 @@ export class CalendarGridCellTplDirective {
  */
 @Directive({selector: 'cr-calendar-grid-row'})
 export class CalendarGridRowDirective {
-  @HostBinding('class') row = 'row mr-0 ml-0';
+  // NOTE: List classes individually rather than combined e.g. @HostBinding('class') class = 'row mr-o ml-0';
+  // Listing individually allows client to add classes @see CalendarGridComponent styles
+  @HostBinding('class.row') row = 'row';
+  @HostBinding('class.mr-0') mr = 'mr-0';
+  @HostBinding('class.ml-0') ml = 'ml-0';
   @ContentChildren(CalendarGridLabelTplDirective, {descendants: false}) labelTpls: QueryList<CalendarGridLabelTplDirective>;
   @ContentChildren(CalendarGridCellTplDirective, {descendants: false}) cellTpls: QueryList<CalendarGridCellTplDirective>;
 }
@@ -57,7 +63,12 @@ export class CalendarGridRowDirective {
   `]
 })
 export class CalendarGridCellComponent {
-  @HostBinding('class') class = 'col d-flex pl-2 pr-2';
+  // NOTE: List classes individually rather than combined e.g. @HostBinding('class') class = 'row mr-o ml-0';
+  // Listing individually allows client to add classes @see CalendarGridComponent styles
+  @HostBinding('class.col') col = 'col';
+  @HostBinding('class.d-flex') dflex = 'd-flex';
+  @HostBinding('class.pl-2') pl = 'pl-2';
+  @HostBinding('class.pr-2') pr = 'pr-2';
   constructor() { }
 }
 
@@ -203,9 +214,7 @@ export class CalendarGridComponent implements OnChanges {
       template = row[templates].first;
     } else {
       // Find the template that matches the row offset (e.g. a row with 2 labels, will have 1 for header row and 1 for nested row)
-      template = row[templates].find((item, idx, array) => {
-        return idx === (this.rowIndexMap.get(index) && this.rowIndexMap.get(index).offset) || row[templates].last;
-      });
+      template = row[templates].find((item, idx, array) => idx === this.rowIndexMap.get(index).offset) || row[templates].last;
     }
     return template;
   }
@@ -356,9 +365,7 @@ export class CalendarGridClassComponent {
       template = row[templates].first;
     } else {
       // Find the template that matches the row offset (e.g. a row with 2 labels, will have 1 for header row and 1 for nested row)
-      template = row[templates].find((item, idx, array) => {
-        return idx === (this.calendarGridData.rowIndexMap.get(index) && this.calendarGridData.rowIndexMap.get(index).offset) || row[templates].last;
-      });
+      template = row[templates].find((item, idx, array) => idx === this.calendarGridData.rowIndexMap.get(index).offset) || row[templates].last;
     }
     return template;
   }
