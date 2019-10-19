@@ -1,25 +1,6 @@
 import { Component, ContentChildren, Directive, HostBinding, Input, OnChanges, QueryList, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { SafeStyle, DomSanitizer } from '@angular/platform-browser';
 
-export interface CalendarGridCell<T> {
-  id: string;
-  date: Date;
-  value: T;
-}
-export interface CalendarGridRow<T> {
-  label: string;
-  cells: CalendarGridCell<T>[];
-  node: CalendarGridRow<any>; // <any> Least restrictive: If it's nested it might be a different shape.
-}
-
-/**
- * Wrapper object to contain data and config.
- * Expectation: Additional fields will be added/required e.g. preferences, flags, etc.
- */
-export interface CalendarGridData {
-  rows: CalendarGridRow<any>[];
-}
-
 /**
  * A directive to wrap content to be displayed as the row label.
  * Exposes TemplateRef that can be used to project content.
@@ -80,6 +61,32 @@ export class CalendarGridCellComponent {
   constructor() { }
 }
 
+// -------------------------------------------- Model --------------------------------------------
+
+export interface CalendarGridCell<T> {
+  id: string;
+  date: Date;
+  value: T;
+}
+export interface CalendarGridRow<T> {
+  label: string;
+  cells: CalendarGridCell<T>[];
+  node: CalendarGridRow<any>; // <any> Least restrictive: If it's nested it might be a different shape.
+}
+
+// ------------------------------------------ Interface ------------------------------------------
+
+/**
+ * Wrapper object to contain data and config.
+ * Expectation: Additional fields will be added/required e.g. preferences, flags, etc.
+ */
+export interface CalendarGridData {
+  rows: CalendarGridRow<any>[];
+  visibleRows: Set<number>;
+}
+
+// ---------------------------------------- Multi Input() ----------------------------------------
+
 @Component({
   selector: 'cr-calendar-grid',
   template: `
@@ -118,15 +125,6 @@ export class CalendarGridComponent implements OnChanges {
 
   rowIndexMap = new Map<number, {parent: number, offset: number}>();
 
-  // TODO change to bitmask to be more efficient as number is 64bit precision.
-  // After an update we need to maintain the list of visible rows.
-  // Option1: Pass in visibleRows so parent can control what is visible.
-  // Option2: Don't reset visible rows with ngOnChanges.
-  @Input()
-  visibleRows?: Set<number> = new Set<number>();
-
-  visibleRowMask: [0];
-
   constructor() {}
 
   ngOnChanges(): void {
@@ -141,7 +139,7 @@ export class CalendarGridComponent implements OnChanges {
         // Parent Row
         let offsetFromParent = 0;
         rows.push(row);
-        this.visibleRows.add(totalIndex);
+        this.calendarGridData.visibleRows.add(totalIndex);
         this.rowIndexMap.set(totalIndex, {parent: index, offset: offsetFromParent});
         totalIndex++;
         // Loop nested rows (i.e. children and grandchildren...)
@@ -160,7 +158,7 @@ export class CalendarGridComponent implements OnChanges {
   }
 
   isRowVisible(index: number): boolean {
-    return this.visibleRows.has(index);
+    return this.calendarGridData.visibleRows.has(index);
   }
 
   /**
@@ -169,8 +167,8 @@ export class CalendarGridComponent implements OnChanges {
    */
   toggleRowVisibility(index: number): void {
     // Expand a row
-    if (!this.visibleRows.has(index)) {
-      this.visibleRows.add(index);
+    if (!this.calendarGridData.visibleRows.has(index)) {
+      this.calendarGridData.visibleRows.add(index);
       return;  // Nothing else to do, exit.
     }
     // Collapse a row and it's children
@@ -178,8 +176,8 @@ export class CalendarGridComponent implements OnChanges {
     // Loop rows to find the same parent and parentOffset > rowMap.offset (i.e. if the offset is bigger it's a child);
     this.rowIndexMap.forEach((value, key, map) => {
       if (key === index || (key > index && rowMap.parent === value.parent)) {
-        if (this.visibleRows.has(key)) {
-          this.visibleRows.delete(key);
+        if (this.calendarGridData.visibleRows.has(key)) {
+          this.calendarGridData.visibleRows.delete(key);
         }
       }
     });
@@ -224,6 +222,8 @@ export class CalendarGridComponent implements OnChanges {
     return `${parentOffset}rem`;
   }
 }
+
+// ----------------------------------------- CLASS -----------------------------------------------
 
 export class CalendarGridDataClass {
   rows: CalendarGridRow<any>[];

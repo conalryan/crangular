@@ -2,17 +2,17 @@ import { CalendarGridCell, CalendarGridRow, CalendarGridData } from '../../../..
 
 export const strCells = (): CalendarGridCell<string>[] => {
   return [
-    {id: 'A', date: new Date(2019, 9, 1, 0, 0, 0, 0), value: '1'},
-    {id: 'A', date: new Date(2019, 9, 2, 0, 0, 0, 0), value: '2'},
-    {id: 'A', date: new Date(2019, 9, 3, 0, 0, 0, 0), value: '3'},
-    {id: 'A', date: new Date(2019, 9, 4, 0, 0, 0, 0), value: '4'},
-    {id: 'A', date: new Date(2019, 9, 5, 0, 0, 0, 0), value: '5'},
-    {id: 'A', date: new Date(2019, 9, 6, 0, 0, 0, 0), value: '6'},
-    {id: 'A', date: new Date(2019, 9, 7, 0, 0, 0, 0), value: '7'},
-    {id: 'A', date: new Date(2019, 9, 8, 0, 0, 0, 0), value: '6'},
-    {id: 'A', date: new Date(2019, 9, 9, 0, 0, 0, 0), value: '5'},
-    {id: 'A', date: new Date(2019, 9, 10, 0, 0, 0, 0), value: '4'},
-    {id: 'A', date: new Date(2019, 9, 11, 0, 0, 0, 0), value: '3'}
+    {id: 'A', date: new Date(2019, 9, 1, 0, 0, 0, 0), value: 'one'},
+    {id: 'A', date: new Date(2019, 9, 2, 0, 0, 0, 0), value: 'two'},
+    {id: 'A', date: new Date(2019, 9, 3, 0, 0, 0, 0), value: 'three'},
+    {id: 'A', date: new Date(2019, 9, 4, 0, 0, 0, 0), value: 'four'},
+    {id: 'A', date: new Date(2019, 9, 5, 0, 0, 0, 0), value: 'five'},
+    {id: 'A', date: new Date(2019, 9, 6, 0, 0, 0, 0), value: 'siv'},
+    {id: 'A', date: new Date(2019, 9, 7, 0, 0, 0, 0), value: 'seven'},
+    {id: 'A', date: new Date(2019, 9, 8, 0, 0, 0, 0), value: 'six'},
+    {id: 'A', date: new Date(2019, 9, 9, 0, 0, 0, 0), value: 'fiv'},
+    {id: 'A', date: new Date(2019, 9, 10, 0, 0, 0, 0), value: 'four'},
+    {id: 'A', date: new Date(2019, 9, 11, 0, 0, 0, 0), value: 'three'}
   ];
 };
 
@@ -70,7 +70,8 @@ export const calendarGridRows = (): CalendarGridRow<any>[] => {
 
 export const calendarGridData = (): CalendarGridData => {
   return {
-    rows: calendarGridRows()
+    rows: calendarGridRows(),
+    visibleRows: new Set<number>()
   };
 };
 
@@ -108,7 +109,8 @@ export const calendarGridSingleNestRows = (): CalendarGridRow<any>[] => {
 
 export const calendarGridNestedData = (): CalendarGridData => {
   return {
-    rows: calendarGridSingleNestRows()
+    rows: calendarGridSingleNestRows(),
+    visibleRows: new Set<number>()
   };
 };
 
@@ -158,6 +160,7 @@ export const calendarGridDoubleNestRows = (): CalendarGridRow<any>[] => {
 
 export const calendarGridDoubleNestedData = (): CalendarGridData => {
   return {
-    rows: calendarGridDoubleNestRows()
+    rows: calendarGridDoubleNestRows(),
+    visibleRows: new Set<number>()
   };
 };
