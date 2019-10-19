@@ -1,4 +1,4 @@
-import { Component, ContentChildren, Directive, HostBinding, Input, OnChanges, QueryList, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ContentChildren, Directive, HostBinding, Input, OnChanges, QueryList, TemplateRef, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 import { SafeStyle, DomSanitizer } from '@angular/platform-browser';
 
 /**
@@ -124,7 +124,8 @@ export interface CalendarGridData {
       border-bottom: 1px solid #d2d2d2;
     }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  // encapsulation: ViewEncapsulation.None
 })
 export class CalendarGridComponent implements OnChanges {
 

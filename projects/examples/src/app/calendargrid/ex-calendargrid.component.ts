@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { CalendarGridData, CalendarGridDataClass } from '../../../../crangular/src/lib/calendargrid/calendargrid';
 import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData } from './calendar-grid-data.stub';
 
@@ -164,20 +164,25 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
 
     <h3>Double Nested Data: Experimenting with multi label/cells per row</h3>
 
-    <h4>Two labels per row</h4>
+    <h4 style="background-color:blue">Two labels per row</h4>
+    <h4 [ngStyle]="{'color': 'blue'}">Two labels per row</h4>
+    <h4 class="blue-it">Two labels per row</h4>
     <br/><br/>
+
     <cr-calendar-grid [calendarGridData]="calendarGridDoubleNestedData">
-      <cr-calendar-grid-row [ngStyle]="{
-    'background-color': 'blue',
-    'font-size': '20px',
-    'font-weight': 'bold'
-  }">
+
+      <!--<cr-calendar-grid-row style="border: 1px solid blue">-->
+      <!--<cr-calendar-grid-row [ngStyle]="{'color': 'blue'}">-->
+      <!--<cr-calendar-grid-row id="blue-it">-->
+      <cr-calendar-grid-row class="blue-it">
         <ng-template crCalendarGridLabel let-l="label">
           <span>First: {{ l }}</span>
         </ng-template>
+
         <ng-template crCalendarGridLabel let-l="label">
           <span>Second: {{ l }}</span>
         </ng-template>
+
         <ng-template crCalendarGridCell let-c="cell">
           {{ c?.value }}
         </ng-template>
@@ -250,8 +255,17 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
     </cr-calendar-grid-class>-->
   `,
   styles: [`
-
-  `]
+    #blue-it {
+      color: blue;
+    }
+    .blue-it {
+      color: blue;
+    }
+    .calendar-grid-row {
+      color: blue;
+    }
+  `],
+  encapsulation: ViewEncapsulation.None
 })
 export class ExCalendargridComponent {
 
