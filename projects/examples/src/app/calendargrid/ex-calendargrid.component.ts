@@ -174,7 +174,8 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
       <!--<cr-calendar-grid-row style="border: 1px solid blue">-->
       <!--<cr-calendar-grid-row [ngStyle]="{'color': 'blue'}">-->
       <!--<cr-calendar-grid-row id="blue-it">-->
-      <cr-calendar-grid-row class="blue-it">
+      <!--<cr-calendar-grid-row class="blue-it">-->
+      <cr-calendar-grid-row>
         <ng-template crCalendarGridLabel let-l="label">
           <span>First: {{ l }}</span>
         </ng-template>
@@ -262,7 +263,7 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
       color: blue;
     }
     .calendar-grid-row {
-      color: blue;
+      background-color: red;
     }
   `],
   encapsulation: ViewEncapsulation.None
