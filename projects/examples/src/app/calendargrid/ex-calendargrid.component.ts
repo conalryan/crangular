@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CalendarGridData } from '../../../../crangular/src/lib/calendargrid/calendargrid';
+import { CalendarGridData, CalendarGridDataClass } from '../../../../crangular/src/lib/calendargrid/calendargrid';
 import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData } from './calendar-grid-data.stub';
 
 @Component({
@@ -210,6 +210,37 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
         </ng-template>
       </cr-calendar-grid-row>
     </cr-calendar-grid>
+
+
+    <h4>Template for each row Calendar Grid Class</h4>
+    <cr-calendar-grid-class [calendarGridData]="calendarGridDoulbeNestedDataClass">
+      <cr-calendar-grid-row>
+        <ng-template crCalendarGridLabel let-l="label">
+          {{ l }}
+        </ng-template>
+        <ng-template crCalendarGridCell let-c="cell">
+          {{ c?.value }}
+        </ng-template>
+      </cr-calendar-grid-row>
+
+      <cr-calendar-grid-row>
+        <ng-template crCalendarGridLabel let-l="label">
+          {{ l }}
+        </ng-template>
+        <ng-template crCalendarGridCell let-c="cell">
+          {{ c?.value }}
+        </ng-template>
+      </cr-calendar-grid-row>
+
+      <cr-calendar-grid-row>
+        <ng-template crCalendarGridLabel let-l="label">
+          {{ l }}
+        </ng-template>
+        <ng-template crCalendarGridCell let-c="cell">
+          <span *ngIf="c?.value">TRUE</span>
+        </ng-template>
+      </cr-calendar-grid-row>
+    </cr-calendar-grid-class>
   `,
   styles: [`
 
@@ -223,5 +254,10 @@ export class ExCalendargridComponent {
 
   calendarGridDoubleNestedData: CalendarGridData = calendarGridDoubleNestedData();
 
-  constructor() { }
+  calendarGridDoulbeNestedDataClass: CalendarGridDataClass = new CalendarGridDataClass(calendarGridDoubleNestedData().rows);
+
+  constructor() {
+    console.log(this.calendarGridDoubleNestedData);
+    console.log(this.calendarGridDoulbeNestedDataClass);
+   }
 }

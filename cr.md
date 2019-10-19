@@ -85,3 +85,15 @@ ng g lib crangular --style=scss --prefix=cr
 ```bash
 ng g m calendargrid --project crangular
 ```
+
+## Bitmask
+
+Setup an array of numbers that will be used as a bitmask for the row visibility.
+Rational: 
+- number is 64 bit precission floating point. 
+- Bitmask is 32 bit signed integer.
+- Store 62 rows of data in same memory footprint as single number
+```typscript
+visibleByNumber = new Set<number>();
+visibleByMask = [0,1];
+```
