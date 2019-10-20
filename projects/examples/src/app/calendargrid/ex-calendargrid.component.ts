@@ -7,12 +7,13 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
   template: `
     <h2>Calendar Grid Wrapper</h2>
 
-    <!--<h4>No templates (use with primitive value)</h4>
+    <h4>No templates (use with primitive value)</h4>
+
     <cr-calendar-grid [calendarGridData]="calendarGridData"></cr-calendar-grid>
 
     <br/><br/>
 
-    <h4>Single template for all rows</h4>
+    <!--<h4>Single template for all rows</h4>
     <cr-calendar-grid [calendarGridData]="calendarGridData">
       <cr-calendar-grid-row>
         <ng-template crCalendarGridLabel let-l="label">
@@ -158,7 +159,7 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
           <span *ngIf="c?.value">TRUE</span>
         </ng-template>
       </cr-calendar-grid-row>
-    </cr-calendar-grid>-->
+    </cr-calendar-grid>
 
     <br/><br/>
 
@@ -171,10 +172,6 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
 
     <cr-calendar-grid [calendarGridData]="calendarGridDoubleNestedData">
 
-      <!--<cr-calendar-grid-row style="border: 1px solid blue">-->
-      <!--<cr-calendar-grid-row [ngStyle]="{'color': 'blue'}">-->
-      <!--<cr-calendar-grid-row id="blue-it">-->
-      <!--<cr-calendar-grid-row class="blue-it">-->
       <cr-calendar-grid-row>
         <ng-template crCalendarGridLabel let-l="label">
           <span>First: {{ l }}</span>
@@ -188,7 +185,7 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
           {{ c?.value }}
         </ng-template>
       </cr-calendar-grid-row>
-    </cr-calendar-grid>
+    </cr-calendar-grid>-->
 
     <br/><br/>
 
@@ -265,7 +262,10 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
     // cr-calendar-grid-label:nth-of-type(1) {
     //   background-color: #d2d2d2;
     // }
-    .calendar-grid-label:nth-of-type(1) {
+    // .calendar-grid-label:nth-of-type(2) {
+    //   background-color: #d2d2d2;
+    // }
+    .calendar-grid-row:nth-of-type(2) .calendar-grid-label {
       background-color: #d2d2d2;
     }
     // cr-calendar-grid-label.calendar-grid-label {

@@ -210,12 +210,14 @@ export class CalendarGridComponent implements OnChanges {
   template(index: number, templates: string): CalendarGridLabelTplDirective | CalendarGridCellTplDirective | null {
     let template: CalendarGridLabelTplDirective | CalendarGridCellTplDirective | null;
     const row = this.row(index);
-    if (row[templates].length === 1) {
-      // Client is iterating over a single template
-      template = row[templates].first;
-    } else {
-      // Find the template that matches the row offset (e.g. a row with 2 labels, will have 1 for header row and 1 for nested row)
-      template = row[templates].find((item, idx, array) => idx === this.rowIndexMap.get(index).offset) || row[templates].last;
+    if (row) {
+      if (row[templates].length === 1) {
+        // Client is iterating over a single template
+        template = row[templates].first;
+      } else {
+        // Find the template that matches the row offset (e.g. a row with 2 labels, will have 1 for header row and 1 for nested row)
+        template = row[templates].find((item, idx, array) => idx === this.rowIndexMap.get(index).offset) || row[templates].last;
+      }
     }
     return template;
   }
