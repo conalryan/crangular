@@ -104,7 +104,7 @@ export interface CalendarGridData {
     <ng-container *ngFor="let calendarGridRow of allCalendarGridRows; let i = index">
       <cr-calendar-grid-row *ngIf="isRowVisible(i)" class="calendar-grid-row">
 
-        <cr-calendar-grid-label class="pr-2" [ngStyle]="{'padding-left': paddingOffset(i)}">
+        <cr-calendar-grid-label class="pr-2 calendar-grid-label" [ngStyle]="{'padding-left': paddingOffset(i)}">
           <span *ngIf="calendarGridRow.node && !isRowVisible(i + 1)" class="pr-2" (click)="toggleRowVisibility(i + 1)">O</span>
           <span *ngIf="calendarGridRow.node && isRowVisible(i + 1)" class="pr-2" (click)="toggleRowVisibility(i + 1)">X</span>
           <ng-container *ngIf="!template(i, 'labelTpls')">{{ calendarGridRow.label }}</ng-container>

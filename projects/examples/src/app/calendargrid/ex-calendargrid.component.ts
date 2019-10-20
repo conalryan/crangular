@@ -262,7 +262,16 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
     .blue-it {
       color: blue;
     }
-    .calendar-grid-row {
+    // cr-calendar-grid-label:nth-of-type(1) {
+    //   background-color: #d2d2d2;
+    // }
+    .calendar-grid-label:nth-of-type(1) {
+      background-color: #d2d2d2;
+    }
+    // cr-calendar-grid-label.calendar-grid-label {
+    //   background-color: #d2d2d2;
+    // }
+    .calendar-grid-row:nth-of-type(1) {
       background-color: red;
     }
   `],
