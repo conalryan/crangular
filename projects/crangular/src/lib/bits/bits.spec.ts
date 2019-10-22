@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BitsComponent } from './bits.component';
+import { BitsComponent } from './bits';
 
 describe('BitsComponent', () => {
   let component: BitsComponent;
