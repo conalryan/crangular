@@ -3,7 +3,7 @@ import { CalendarGridData, CalendarGridDataClass } from '../../../../crangular/s
 import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData } from './calendar-grid-data.stub';
 
 @Component({
-  selector: 'excr-calendargrid',
+  selector: 'cr-calendargrid-ex',
   template: `
     <h2>Calendar Grid Wrapper</h2>
 
@@ -269,7 +269,7 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
   `],
   encapsulation: ViewEncapsulation.None
 })
-export class ExCalendargridComponent {
+export class CalendargridExComponent {
 
   calendarGridData: CalendarGridData = calendarGridData();
 

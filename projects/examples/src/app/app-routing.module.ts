@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { CalendargridExComponent } from './calendar-grid/calendar-grid-ex.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'calendar-grid', pathMatch: 'full' },
   {
     path: 'calendar-grid',
-    loadChildren: './calendargrid/ex-calendargrid.module#ExCalendargridModule'
+    component: CalendargridExComponent
   }
 ];
 

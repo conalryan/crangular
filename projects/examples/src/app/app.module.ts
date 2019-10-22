@@ -3,14 +3,17 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ExCalendargridModule } from './calendargrid/ex-calendargrid.module';
+import { CalendargridExComponent } from './calendar-grid/calendar-grid-ex.component';
+import { CalendargridModule } from '../../../crangular/src/lib/calendargrid/calendargrid.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CalendargridExComponent
   ],
   imports: [
     BrowserModule,
+    CalendargridModule,
     AppRoutingModule
   ],
   providers: [],
