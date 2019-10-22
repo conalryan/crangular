@@ -97,3 +97,9 @@ Rational:
 visibleByNumber = new Set<number>();
 visibleByMask = [0,1];
 ```
+
+```bash
+ng g m bits --project crangular
+ng g c bits --project crangular -it -is
+ng g c bits-ex --project examples --spec false
+```
