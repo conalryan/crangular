@@ -8,7 +8,7 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
   styleUrls: ['./calendar-grid-ex.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class CalendargridExComponent {
+export class CalendarGridExComponent {
 
   calendarGridData: CalendarGridData = calendarGridData();
 

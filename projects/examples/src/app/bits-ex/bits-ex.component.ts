@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'excr-bits-ex',
+  selector: 'cr-bits-ex',
   templateUrl: './bits-ex.component.html',
   styleUrls: ['./bits-ex.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

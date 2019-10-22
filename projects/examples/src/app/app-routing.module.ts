@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CalendargridExComponent } from './calendar-grid/calendar-grid-ex.component';
+import { CalendarGridExComponent } from './calendar-grid-ex/calendar-grid-ex.component';
 import { BitsExComponent } from './bits-ex/bits-ex.component';
 
 const routes: Routes = [
@@ -11,7 +11,7 @@ const routes: Routes = [
   },
   {
     path: 'calendar-grid',
-    component: CalendargridExComponent
+    component: CalendarGridExComponent
   }
 ];
 
