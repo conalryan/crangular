@@ -1,4 +1,4 @@
-import { CalendarGridCell, CalendarGridRow, CalendarGridData } from '../../../../crangular/src/lib/calendargrid/calendargrid';
+import { CalendarGridCell, CalendarGridRow, CalendarGridData } from '../../../../crangular/src/lib/calendar-grid/calendar-grid';
 
 export const strCells = (): CalendarGridCell<string>[] => {
   return [

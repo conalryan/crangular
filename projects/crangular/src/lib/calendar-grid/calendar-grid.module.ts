@@ -8,7 +8,7 @@ import {
   CalendarGridRowDirective,
   CalendarGridLabelElmDirective,
   CalendarGridClassComponent
-} from "./calendargrid";
+} from "./calendar-grid";
 
 @NgModule({
   declarations: [
@@ -35,4 +35,4 @@ import {
     CalendarGridClassComponent
   ]
 })
-export class CalendargridModule {}
+export class CalendarGridModule {}

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CalendargridModule } from '../../../crangular/src/lib/calendargrid/calendargrid.module';
+import { CalendarGridModule } from '../../../crangular/src/lib/calendar-grid/calendar-grid.module';
 import { BitsModule } from '../../../crangular/src/lib/bits/bits.module';
 import { BitsExComponent } from './bits-ex/bits-ex.component';
 import { CalendarGridExComponent } from './calendar-grid-ex/calendar-grid-ex.component';
@@ -17,7 +17,7 @@ import { CalendarGridExComponent } from './calendar-grid-ex/calendar-grid-ex.com
   imports: [
     BrowserModule,
     BitsModule,
-    CalendargridModule,
+    CalendarGridModule,
     AppRoutingModule
   ],
   providers: [],
