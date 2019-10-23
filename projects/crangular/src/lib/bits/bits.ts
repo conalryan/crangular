@@ -1,7 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
+export type BitMask = number[];
+
 export const printBits = (n: number): void => {
-  console.log(`n.toString(2): ${n.toString(2)}`);
+  console.log(`printBits: n.toString(2): ${n.toString(2)}`);
 };
 
 /**
@@ -26,6 +28,21 @@ export const printBits = (n: number): void => {
 export const setBit = (n: number, bitIndex: number): number => {
   const bitMask = 1 << bitIndex;
   return n | bitMask;
+};
+
+export const setBits = (bits: number[], bitIndex: number): void => {
+  // TODO: temp using 0 to test pass by ref with array
+  const bitMask = 1 << bitIndex;
+  bits[0] = bits[0] | bitMask;
+};
+
+export const setBitObj = (bitMaskObj: {bitMask: number}, bitIndex: number): void => {
+  const bitMask = 1 << bitIndex;
+  bitMaskObj.bitMask = bitMaskObj.bitMask | bitMask;
+};
+
+export const setBitMask = (bitMask: BitMask, bitIndex: number): void => {
+  bitMask[0] = bitMask[0] | 1 << bitIndex;
 };
 
 export const getBit = (n: number, bitIndex: number): number => {
