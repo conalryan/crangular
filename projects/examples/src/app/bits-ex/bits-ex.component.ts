@@ -21,7 +21,7 @@ export class BitsExComponent implements OnInit {
   setBits(bitIndex: number): void {
     console.log(`bitIndex: ${bitIndex}`);
     printBits(this.bitMask);
-    /* const bit =  */setBit(this.bitMask, bitIndex);
+    this.bitMask = this.bitMask | setBit(this.bitMask, bitIndex);
     printBits(this.bitMask);
   }
 }

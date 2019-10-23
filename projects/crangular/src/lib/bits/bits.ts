@@ -23,15 +23,7 @@ export const printBits = (n: number): void => {
  * @param n
  * @param bitIndex
  */
-export const setBit = (n: number, bitIndex: number): void => {
-  console.log('setting bit');
-  console.log(`n: ${n}`);
-  console.log(`bitIndex: ${bitIndex}`);
-  n = n | 1 << bitIndex;
-  console.log(`n: ${n}`);
-};
-
-export const setAndReturnBit = (n: number, bitIndex: number): number => {
+export const setBit = (n: number, bitIndex: number): number => {
   const bitMask = 1 << bitIndex;
   return n | bitMask;
 };
