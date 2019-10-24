@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { printBits, setBitObj, setBits, BitMask, setBitMask } from '../../../../crangular/src/lib/bits/bits';
+import { printBits, setBitObj, setBits, BitMask, setBitMaskZero } from '../../../../crangular/src/lib/bits/bits';
 
 @Component({
   selector: 'cr-bits-ex',
@@ -9,33 +9,32 @@ import { printBits, setBitObj, setBits, BitMask, setBitMask } from '../../../../
 })
 export class BitsExComponent {
 
-  bitMask: number;
-  bitMasks: number[];
+  bitMaskNum: number;
+  bitMaskNums: number[];
   bitMaskObj: {bitMask: number};
-
-  bitMaskT: BitMask;
+  bitMask: BitMask;
 
   constructor() {
-    this.bitMask = 0;
-    this.bitMasks = [0];
+    this.bitMaskNum = 0;
+    this.bitMaskNums = [0];
     this.bitMaskObj = {bitMask: 0};
-    this.bitMaskT = [0];
+    this.bitMask = [0];
   }
 
   setBits(bitIndex: number): void {
     console.log(`bitIndex: ${bitIndex}`);
 
-    printBits(this.bitMask);
+    printBits(this.bitMaskNum);
     // Pass by value
     // this.bitMask = this.bitMask | setBit(this.bitMask, bitIndex);
-    this.bitMask = this.bitMask | 1 << bitIndex;
-    printBits(this.bitMask);
+    this.bitMaskNum = this.bitMaskNum | 1 << bitIndex;
+    printBits(this.bitMaskNum);
 
     // Pass by array
     console.log(`bitMasks:`);
-    printBits(this.bitMasks[0]);
-    setBits(this.bitMasks, bitIndex);
-    printBits(this.bitMasks[0]);
+    printBits(this.bitMaskNums[0]);
+    setBits(this.bitMaskNums, bitIndex);
+    printBits(this.bitMaskNums[0]);
 
     // Pass by ref
     console.log(`bitMaskObj.bitMask:`);
@@ -45,8 +44,8 @@ export class BitsExComponent {
 
     // Pass by ref BitMask type
     console.log(`BitMask:`);
-    printBits(this.bitMaskT[0]);
-    setBitMask(this.bitMaskT, bitIndex);
-    printBits(this.bitMaskT[0]);
+    printBits(this.bitMask[0]);
+    setBitMaskZero(this.bitMask, bitIndex);
+    printBits(this.bitMask[0]);
   }
 }

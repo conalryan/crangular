@@ -1,11 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
-export type BitMask = number[];
-
-export const printBits = (n: number): void => {
-  console.log(`printBits: n.toString(2): ${n.toString(2)}`);
-};
-
 /**
  * Set bit of given number (32-bit signed) to 1 at given index (0 indexed)
  *
@@ -41,10 +35,6 @@ export const setBitObj = (bitMaskObj: {bitMask: number}, bitIndex: number): void
   bitMaskObj.bitMask = bitMaskObj.bitMask | bitMask;
 };
 
-export const setBitMask = (bitMask: BitMask, bitIndex: number): void => {
-  bitMask[0] = bitMask[0] | 1 << bitIndex;
-};
-
 export const getBit = (n: number, bitIndex: number): number => {
   const bitMask = 1 << bitIndex;
   const result = n & bitMask;
@@ -54,6 +44,38 @@ export const getBit = (n: number, bitIndex: number): number => {
 export const clearBit = (n: number, bitIndex: number): number => {
   const bitMask = ~(1 << bitIndex);
   return n & bitMask;
+};
+
+export type BitMask = number[];
+
+export const printBits = (n: number): void => {
+  console.log(`Bits: ${n.toString(2)}`);
+};
+
+export const getMaskIndex = (bitIndex: number): number => {
+  const maskIndex = Math.floor(bitIndex / 32);
+  console.log(maskIndex);
+  return maskIndex;
+};
+
+export const setBitMaskZero = (bitMask: BitMask, bitIndex: number): void => {
+  bitMask[0] = bitMask[0] | 1 << bitIndex;
+};
+
+export const setBitMask = (bitMask: BitMask, bitIndex: number): void => {
+  const maskIndex = getMaskIndex(bitIndex);
+  bitMask[maskIndex] = bitMask[maskIndex] | 1 << bitIndex;
+};
+
+export const getBitMask = (bitMask: BitMask, bitIndex: number): number => {
+  const maskIndex = getMaskIndex(bitIndex);
+  const result = bitMask[maskIndex] & 1 << bitIndex;
+  return result >>> bitIndex;
+};
+
+export const clearBitMask = (bitMask: BitMask, bitIndex: number): number => {
+  const maskIndex = getMaskIndex(bitIndex);
+  return bitMask[maskIndex] & ~(1 << bitIndex);
 };
 
 @Component({
