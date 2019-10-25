@@ -1,4 +1,3 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 /**
  * Set bit of given number (32-bit signed) to 1 at given index (0 indexed)
@@ -16,50 +15,31 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
  *  a = a | 1 << 2;
  *  a.toString(2); // 11
  *
- * @param n
- * @param bitIndex
  */
-export const setBit = (n: number, bitIndex: number): number => {
-  const bitMask = 1 << bitIndex;
-  return n | bitMask;
-};
 
-export const setBits = (bits: number[], bitIndex: number): void => {
-  // TODO: temp using 0 to test pass by ref with array
-  const bitMask = 1 << bitIndex;
-  bits[0] = bits[0] | bitMask;
-};
-
-export const setBitObj = (bitMaskObj: {bitMask: number}, bitIndex: number): void => {
-  const bitMask = 1 << bitIndex;
-  bitMaskObj.bitMask = bitMaskObj.bitMask | bitMask;
-};
-
-export const getBit = (n: number, bitIndex: number): number => {
-  const bitMask = 1 << bitIndex;
-  const result = n & bitMask;
-  return result >>> bitIndex;
-};
-
-export const clearBit = (n: number, bitIndex: number): number => {
-  const bitMask = ~(1 << bitIndex);
-  return n & bitMask;
-};
-
+/**
+ * Type to abstract implementation of a dynamic bitmask.
+ * Usage: Track flags over an array of unknown length.
+ * Note: JS bitmask is 32-bit signed number vs 64-bit number type.
+ * Therefore, number[] is much more efficient than set<number>
+ */
 export type BitMask = number[];
 
-export const printBits = (n: number): void => {
-  console.log(`Bits: ${n.toString(2)}`);
+export const printBits = (n: number): string => {
+  const bitStr = n.toString(2);
+  console.log(`[bits]: ${bitStr}`);
+  return bitStr;
+};
+
+export const printBitMask = (bitMask: BitMask): string => {
+  const bits = bitMask.map(bit => bit.toString(2)).join('');
+  console.log(`[bits]: ${bits}`);
+  return bits;
 };
 
 export const getMaskIndex = (bitIndex: number): number => {
   const maskIndex = Math.floor(bitIndex / 32);
-  console.log(maskIndex);
   return maskIndex;
-};
-
-export const setBitMaskZero = (bitMask: BitMask, bitIndex: number): void => {
-  bitMask[0] = bitMask[0] | 1 << bitIndex;
 };
 
 export const setBitMask = (bitMask: BitMask, bitIndex: number): void => {
@@ -73,26 +53,7 @@ export const getBitMask = (bitMask: BitMask, bitIndex: number): number => {
   return result >>> bitIndex;
 };
 
-export const clearBitMask = (bitMask: BitMask, bitIndex: number): number => {
+export const clearBitMask = (bitMask: BitMask, bitIndex: number): void => {
   const maskIndex = getMaskIndex(bitIndex);
-  return bitMask[maskIndex] & ~(1 << bitIndex);
+  bitMask[maskIndex] = bitMask[maskIndex] & ~(1 << bitIndex);
 };
-
-@Component({
-  selector: 'cr-bits',
-  template: `
-    <p>
-      bits works!
-    </p>
-  `,
-  styles: [],
-  changeDetection: ChangeDetectionStrategy.OnPush
-})
-export class BitsComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}
