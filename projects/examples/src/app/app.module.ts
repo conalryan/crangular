@@ -7,12 +7,14 @@ import { CalendarGridModule } from '../../../crangular/src/lib/calendar-grid/cal
 import { BitsModule } from '../../../crangular/src/lib/bits/bits.module';
 import { BitsExComponent } from './bits-ex/bits-ex.component';
 import { CalendarGridExComponent } from './calendar-grid-ex/calendar-grid-ex.component';
+import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CalendarGridExComponent,
-    BitsExComponent
+    BitsExComponent,
+    SizeofExComponent
   ],
   imports: [
     BrowserModule,

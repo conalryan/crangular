@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { CalendarGridExComponent } from './calendar-grid-ex/calendar-grid-ex.component';
+import { RouterModule, Routes } from '@angular/router';
 import { BitsExComponent } from './bits-ex/bits-ex.component';
+import { CalendarGridExComponent } from './calendar-grid-ex/calendar-grid-ex.component';
+import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'calendar-grid', pathMatch: 'full' },
@@ -12,6 +13,10 @@ const routes: Routes = [
   {
     path: 'calendar-grid',
     component: CalendarGridExComponent
+  },
+  {
+    path: 'sizeof',
+    component: SizeofExComponent
   }
 ];
 

@@ -18,9 +18,13 @@
  */
 
 /**
- * Type to abstract implementation of a dynamic bitmask.
- * Usage: Track flags over an array of unknown length.
- * Note: JS bitmask is 32-bit signed number vs 64-bit number type.
+ * Type abstraction of a dynamic bitmask.
+ * Usage: Track flags over an array of unknown length (e.g. rows of data).
+ *
+ * Note: JS bitmask is 32-bit signed number (vs. number which is 64-bit number).
+ * Store 32*2 bits of true/false values in same memory as single number.
+ * Compare; set<number>(); where each number (64bit), represents a single row that is visible.
+ * to: number[]; where each number as bitmask
  * Therefore, number[] is much more efficient than set<number>
  */
 export type BitMask = number[];
