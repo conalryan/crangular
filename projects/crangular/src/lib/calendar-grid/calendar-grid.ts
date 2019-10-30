@@ -134,19 +134,28 @@ export const isRowVisible = (calendarGridData: CalendarGridData, index: number):
  * Adding a row is quick, check if the row is visible, if not, add it and exit.
  * Closing rows requires checking if there are any children that also need to be closed.
  */
-export const toggleRowVisibility = (calendarGridData: CalendarGridData, index: number): void => {
+export const toggleRowVisibility = (calendarGridData: CalendarGridData, calendarGridRow: CalendarGridRow<any>, index: number): void => {
   // Expand a row
-  if (!isRowVisible(calendarGridData, index)) {
+  if (!isRowVisible(calendarGridData, ++index)) {
     setBit(calendarGridData.visibleRows, index);
     return;  // Nothing else to do, exit.
   }
-  // Collapse a row and it's children
-  const parentOffset = prevSetBit(calendarGridData.parentRows, index);
-  if (parentOffset === 1) {
-    // TODO find all children
-    // const nextParent = nextSetBit(calendarGridData.parentRows, )
-    clearBit(calendarGridData.visibleRows, index);
+  // Collapse all child rows
+  let node: CalendarGridRow<any> = calendarGridRow.node;
+  while (node) {
+    clearBit(calendarGridData.visibleRows, index++);
+    node = node.node;
   }
+  // Collapse a row and it's children
+  // const parentOffset = prevSetBit(calendarGridData.parentRows, index);
+  // if (parentOffset === 1) {
+  //   // TODO find all children
+  //   // const nextParent = nextSetBit(calendarGridData.parentRows, )
+  //   clearBit(calendarGridData.visibleRows, index);
+  // }
+  // Check if the row clicked has a node.
+  // While node clear bits
+
   // const rowMap = this.rowIndexMap.get(index);
   // // Loop rows to find the same parent and parentOffset > rowMap.offset (i.e. if the offset is bigger it's a child);
   // this.rowIndexMap.forEach((value, key, map) => {
@@ -169,11 +178,11 @@ export const toggleRowVisibility = (calendarGridData: CalendarGridData, index: n
         <cr-calendar-grid-label class="pr-2 calendar-grid-label" [ngStyle]="{'padding-left': paddingOffset(i)}">
           <span *ngIf="calendarGridRow.node && !isRowVisible(calendarGridData, i + 1)"
             class="pr-2"
-            (click)="toggleRowVisibility(calendarGridData, i + 1)">O
+            (click)="toggleRowVisibility(calendarGridData, calendarGridRow, i)">O
           </span>
           <span *ngIf="calendarGridRow.node && isRowVisible(calendarGridData, i + 1)"
             class="pr-2"
-            (click)="toggleRowVisibility(calendarGridData, i + 1)">X
+            (click)="toggleRowVisibility(calendarGridData, calendarGridRow, i)">X
           </span>
           <ng-container *ngIf="!template(i, 'labelTpls')">{{ calendarGridRow.label }}</ng-container>
           <ng-container *ngTemplateOutlet="template(i, 'labelTpls')?.templateRef;context:{label:calendarGridRow.label}"></ng-container>
