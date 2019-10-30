@@ -72,7 +72,7 @@ export class CalendarGridCellComponent {
   constructor() { }
 }
 
-// -------------------------------------------- Model --------------------------------------------
+// ------------------------------------------ Interface ------------------------------------------
 
 export interface CalendarGridCell<T> {
   id: string;
@@ -84,8 +84,6 @@ export interface CalendarGridRow<T> {
   cells: CalendarGridCell<T>[];
   node: CalendarGridRow<any>; // <any> Least restrictive: If it's nested it might be a different shape.
 }
-
-// ------------------------------------------ Interface ------------------------------------------
 
 /**
  * Wrapper object to contain data, config, flags, etc.
@@ -101,14 +99,6 @@ export const flattenRows = (calendarGridData: CalendarGridData): CalendarGridRow
   if (calendarGridData && calendarGridData.rows) {
     let totalIndex = 0;
     calendarGridData.rows.forEach((row, index, array) => {
-      console.log(`[flattenRows]: totalIndex -------------`);
-      console.log(totalIndex);
-
-      console.log(`[flattenRows]: (row, index, array)`);
-      console.log(row);
-      console.log(index);
-      console.log(array);
-
       // Parent Row
       rows.push(row);
       setBit(calendarGridData.visibleRows, totalIndex);
@@ -135,7 +125,7 @@ export const isRowVisible = (calendarGridData: CalendarGridData, index: number):
  * Closing rows requires checking if there are any children that also need to be closed.
  */
 export const toggleRowVisibility = (calendarGridData: CalendarGridData, calendarGridRow: CalendarGridRow<any>, index: number): void => {
-  // Expand a row
+  // Expand a child row (i.e. ++index)
   if (!isRowVisible(calendarGridData, ++index)) {
     setBit(calendarGridData.visibleRows, index);
     return;  // Nothing else to do, exit.
@@ -143,28 +133,10 @@ export const toggleRowVisibility = (calendarGridData: CalendarGridData, calendar
   // Collapse all child rows
   let node: CalendarGridRow<any> = calendarGridRow.node;
   while (node) {
+    // Collapse this row, then increment the index (i.e. index++)
     clearBit(calendarGridData.visibleRows, index++);
     node = node.node;
   }
-  // Collapse a row and it's children
-  // const parentOffset = prevSetBit(calendarGridData.parentRows, index);
-  // if (parentOffset === 1) {
-  //   // TODO find all children
-  //   // const nextParent = nextSetBit(calendarGridData.parentRows, )
-  //   clearBit(calendarGridData.visibleRows, index);
-  // }
-  // Check if the row clicked has a node.
-  // While node clear bits
-
-  // const rowMap = this.rowIndexMap.get(index);
-  // // Loop rows to find the same parent and parentOffset > rowMap.offset (i.e. if the offset is bigger it's a child);
-  // this.rowIndexMap.forEach((value, key, map) => {
-  //   if (key === index || (key > index && rowMap.parent === value.parent)) {
-  //     if (this.calendarGridData.visibleRows.has(key)) {
-  //       this.calendarGridData.visibleRows.delete(key);
-  //     }
-  //   }
-  // });
 };
 
 // ------------------------------------------- BitMask -------------------------------------------
@@ -225,10 +197,10 @@ export class CalendarGridComponent implements OnChanges {
   row(index: number): CalendarGridRowDirective {
     let row: CalendarGridRowDirective;
     if (this.rows && this.rows.length === 1) {
-      // Client is iterating over a row
+      // Client is iterating over a single row
       row = this.rows.first;
     } else if (this.rows && this.rows.length > 1) {
-      // Find the parent row that matches the index or default to the last row
+      // Find the parent row that matches the row offset else default to the last row
       row = this.rows.find((row, idx, rows) => {
         return idx === prevSetBit(this.calendarGridData.parentRows, index);
       }) || this.rows.last;
@@ -244,7 +216,9 @@ export class CalendarGridComponent implements OnChanges {
         // Client is iterating over a single template
         template = row[templates].first;
       } else {
-        // Find the template that matches the row offset (e.g. a row with 2 labels, will have 1 for header row and 1 for nested row)
+        // Find the template that matches the row offset
+        // (e.g. a row with 2 labels, will have 1 for parent row and 1 for nested row)
+        // else default to the last template.
         template = row[templates].find((item, idx, array) => {
           return idx === prevSetBit(this.calendarGridData.parentRows, index);
         }) || row[templates].last;

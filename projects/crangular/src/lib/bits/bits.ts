@@ -3,11 +3,10 @@
  * Type abstraction of a dynamic bitmask.
  * Usage: Track flags over an array of unknown length (e.g. rows of data).
  *
- * Note: JS bitmask is 32-bit signed number (vs. number which is 64-bit number).
- * Store 32*2 bits of true/false values in same memory as single number.
- * Compare; set<number>(); where each number (64bit), represents a single row that is visible.
- * to: number[]; where each number as bitmask
- * Therefore, number[] is much more efficient than set<number>
+ * Note: JS bitmask is 32-bit signed number (vs. number which is 64-bit).
+ * Therefore we can store 32 true/false values in same memory as single number.
+ * i.e. number[] where each index is bitmask is much more efficient than set<number>()
+ * or number[] where each index represents a single 64bit floating point number.
  */
 export type BitMask = number[];
 
@@ -23,6 +22,12 @@ export const printBitMask = (bitMask: BitMask): string => {
   return bits;
 };
 
+/**
+ * Dynamic bitmask will store 32 bits in each number.
+ * Therefore we must calculate the corerct index across array of numbers
+ * i.e. bitIndex 2 will be in numbers[0] while bitIndex 35 will be in numbers[1].
+ * @param bitIndex
+ */
 export const getMaskIndex = (bitIndex: number): number => {
   const maskIndex = Math.floor(bitIndex / 32);
   return maskIndex;
