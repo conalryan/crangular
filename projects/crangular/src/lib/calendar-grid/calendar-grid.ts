@@ -201,8 +201,9 @@ export class CalendarGridComponent implements OnChanges {
       row = this.rows.first;
     } else if (this.rows && this.rows.length > 1) {
       // Find the parent row that matches the row offset else default to the last row
+      const parentOffset = prevSetBit(this.calendarGridData.parentRows, index);
       row = this.rows.find((row, idx, rows) => {
-        return idx === prevSetBit(this.calendarGridData.parentRows, index);
+        return idx === parentOffset;
       }) || this.rows.last;
     }
     return row;
@@ -217,10 +218,11 @@ export class CalendarGridComponent implements OnChanges {
         template = row[templates].first;
       } else {
         // Find the template that matches the row offset
-        // (e.g. a row with 2 labels, will have 1 for parent row and 1 for nested row)
+        // (e.g. a row with 2 labels, will have 1 for parent row and 1 for nested row(s))
         // else default to the last template.
+        const parentOffset = prevSetBit(this.calendarGridData.parentRows, index);
         template = row[templates].find((item, idx, array) => {
-          return idx === prevSetBit(this.calendarGridData.parentRows, index);
+          return idx === parentOffset;
         }) || row[templates].last;
       }
     }
