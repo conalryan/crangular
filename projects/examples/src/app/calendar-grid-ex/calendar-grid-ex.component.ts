@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { CalendarGridData, CalendarGridDataClass } from '../../../../crangular/src/lib/calendar-grid/calendar-grid';
+import { CalendarGridData } from '../../../../crangular/src/lib/calendar-grid/calendar-grid';
 import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData } from './calendar-grid-data.stub';
 
 @Component({
@@ -15,8 +15,6 @@ export class CalendarGridExComponent {
   calendarGridNestedData: CalendarGridData = calendarGridNestedData();
 
   calendarGridDoubleNestedData: CalendarGridData = calendarGridDoubleNestedData();
-
-  calendarGridDoulbeNestedDataClass: CalendarGridDataClass = new CalendarGridDataClass(calendarGridDoubleNestedData().rows);
 
   constructor() {}
 }

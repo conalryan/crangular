@@ -1,14 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import {
-  CalendarGridCellComponent,
-  CalendarGridCellTplDirective,
-  CalendarGridComponent,
-  CalendarGridLabelTplDirective,
-  CalendarGridRowDirective,
-  CalendarGridLabelElmDirective,
-  CalendarGridClassComponent
-} from "./calendar-grid";
+import { CalendarGridCellComponent, CalendarGridCellTplDirective, CalendarGridComponent, CalendarGridLabelElmDirective, CalendarGridLabelTplDirective, CalendarGridRowDirective } from "./calendar-grid";
 
 @NgModule({
   declarations: [
@@ -18,9 +10,7 @@ import {
     CalendarGridRowDirective,
 
     CalendarGridCellComponent,
-    CalendarGridComponent,
-
-    CalendarGridClassComponent
+    CalendarGridComponent
   ],
   imports: [CommonModule],
   exports: [
@@ -30,9 +20,7 @@ import {
     CalendarGridRowDirective,
 
     CalendarGridCellComponent,
-    CalendarGridComponent,
-
-    CalendarGridClassComponent
+    CalendarGridComponent
   ]
 })
 export class CalendarGridModule {}

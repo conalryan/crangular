@@ -1,4 +1,4 @@
-import { CalendarGridCell, CalendarGridRow, CalendarGridData } from '../../../../crangular/src/lib/calendar-grid/calendar-grid';
+import { CalendarGridCell, CalendarGridData, CalendarGridRow } from '../../../../crangular/src/lib/calendar-grid/calendar-grid';
 
 export const strCells = (): CalendarGridCell<string>[] => {
   return [
@@ -56,12 +56,12 @@ export const calendarGridRows = (): CalendarGridRow<any>[] => {
       node: undefined
     },
     {
-      label: 'Row2',
+      label: 'Row 2',
       cells: numCells(),
       node: undefined
     },
     {
-      label: 'Row3',
+      label: 'Row 3',
       cells: boolCells(),
       node: undefined
     }
@@ -71,7 +71,8 @@ export const calendarGridRows = (): CalendarGridRow<any>[] => {
 export const calendarGridData = (): CalendarGridData => {
   return {
     rows: calendarGridRows(),
-    visibleRows: new Set<number>()
+    visibleRows: [0],
+    parentRows: [0]
   };
 };
 
@@ -110,7 +111,8 @@ export const calendarGridSingleNestRows = (): CalendarGridRow<any>[] => {
 export const calendarGridNestedData = (): CalendarGridData => {
   return {
     rows: calendarGridSingleNestRows(),
-    visibleRows: new Set<number>()
+    visibleRows: [0],
+    parentRows: [0]
   };
 };
 
@@ -161,6 +163,7 @@ export const calendarGridDoubleNestRows = (): CalendarGridRow<any>[] => {
 export const calendarGridDoubleNestedData = (): CalendarGridData => {
   return {
     rows: calendarGridDoubleNestRows(),
-    visibleRows: new Set<number>()
+    visibleRows: [0],
+    parentRows: [0]
   };
 };

@@ -1,5 +1,7 @@
 <h2>Calendar Grid Wrapper</h2>
 
+<!--<h3>Single Row Data (Non-nested data)</h3>
+
 <h4>No templates (use with primitive value)</h4>
 <cr-calendar-grid [calendarGridData]="calendarGridData"></cr-calendar-grid>
 <br /><br />
@@ -42,7 +44,7 @@
   </cr-calendar-grid-row>
 </cr-calendar-grid>
 
-<br /><br />
+<br /><br />-->
 
 <h3>Single Nested Data</h3>
 
@@ -52,7 +54,7 @@
 ></cr-calendar-grid>
 <br /><br />
 
-<h4>Single template for all rows</h4>
+<!--<h4>Single template for all rows</h4>
 <cr-calendar-grid [calendarGridData]="calendarGridNestedData">
   <cr-calendar-grid-row>
     <ng-template crCalendarGridLabel let-l="label">
@@ -183,30 +185,4 @@
       cr3 <span *ngIf="c?.value">TRUE</span>
     </ng-template>
   </cr-calendar-grid-row>
-</cr-calendar-grid>
-
-<br /><br />
-
-<h4>Template for each row Calendar Grid Class</h4>
-<cr-calendar-grid-class [calendarGridData]="calendarGridDoulbeNestedDataClass">
-  <cr-calendar-grid-row>
-    <ng-template crCalendarGridLabel let-l="label"> lr1 {{ l }} </ng-template>
-    <ng-template crCalendarGridCell let-c="cell">
-      cr1 {{ c?.value }}
-    </ng-template>
-  </cr-calendar-grid-row>
-
-  <cr-calendar-grid-row>
-    <ng-template crCalendarGridLabel let-l="label"> lr2 {{ l }} </ng-template>
-    <ng-template crCalendarGridCell let-c="cell">
-      cr2 {{ c?.value }}
-    </ng-template>
-  </cr-calendar-grid-row>
-
-  <cr-calendar-grid-row>
-    <ng-template crCalendarGridLabel let-l="label"> lr3 {{ l }} </ng-template>
-    <ng-template crCalendarGridCell let-c="cell">
-      cr3 <span *ngIf="c?.value">TRUE</span>
-    </ng-template>
-  </cr-calendar-grid-row>
-</cr-calendar-grid-class>
+</cr-calendar-grid>-->

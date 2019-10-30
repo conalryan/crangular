@@ -1,23 +1,5 @@
 
 /**
- * Set bit of given number (32-bit signed) to 1 at given index (0 indexed)
- *
- * Examples Bitwise OR |
- *  Set 1 in first bit position
- *  a = a | 1 << 0;
- *  a.toString(2); // 1
- *
- *  Set '1' in second bit position
- *  a = a | 1 << 1;
- *  a.toString(2); // 10
- *
- *  Set '1' in third bit position
- *  a = a | 1 << 2;
- *  a.toString(2); // 11
- *
- */
-
-/**
  * Type abstraction of a dynamic bitmask.
  * Usage: Track flags over an array of unknown length (e.g. rows of data).
  *
@@ -46,18 +28,58 @@ export const getMaskIndex = (bitIndex: number): number => {
   return maskIndex;
 };
 
-export const setBitMask = (bitMask: BitMask, bitIndex: number): void => {
+/**
+ * Set bit of given number (32-bit signed) to 1 at given index (0 indexed)
+ *
+ * Examples Bitwise OR |
+ *  Set 1 in first bit position
+ *  a = a | 1 << 0;
+ *  a.toString(2); // 1
+ *
+ *  Set '1' in second bit position
+ *  a = a | 1 << 1;
+ *  a.toString(2); // 10
+ *
+ *  Set '1' in third bit position
+ *  a = a | 1 << 2;
+ *  a.toString(2); // 11
+ */
+export const setBit = (bitMask: BitMask, bitIndex: number): void => {
   const maskIndex = getMaskIndex(bitIndex);
   bitMask[maskIndex] = bitMask[maskIndex] | 1 << bitIndex;
 };
 
-export const getBitMask = (bitMask: BitMask, bitIndex: number): number => {
+export const getBit = (bitMask: BitMask, bitIndex: number): number => {
   const maskIndex = getMaskIndex(bitIndex);
   const result = bitMask[maskIndex] & 1 << bitIndex;
   return result >>> bitIndex;
 };
 
-export const clearBitMask = (bitMask: BitMask, bitIndex: number): void => {
+export const clearBit = (bitMask: BitMask, bitIndex: number): void => {
   const maskIndex = getMaskIndex(bitIndex);
   bitMask[maskIndex] = bitMask[maskIndex] & ~(1 << bitIndex);
+};
+
+export const prevSetBit = (bitMask: BitMask, bitIndex: number): number => {
+  let offSet = 0;
+  while (bitIndex > -1) {
+    if (getBit(bitMask, bitIndex) === 1) {
+      break;
+    }
+    offSet++;
+    bitIndex--;
+  }
+  return offSet;
+};
+
+export const nextSetBit = (bitMask: BitMask, bitIndex: number): number => {
+  let offSet = 0;
+  // while (bitIndex > -1) {
+  //   if (getBit(bitMask, bitIndex) === 1) {
+  //     break;
+  //   }
+  //   offSet++;
+  //   bitIndex--;
+  // }
+  return offSet;
 };
