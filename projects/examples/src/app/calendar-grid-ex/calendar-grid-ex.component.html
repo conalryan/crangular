@@ -56,8 +56,7 @@
 
 <h4>1 row, 1 label, 1 cell</h4>
 <cr-calendar-grid id="g-1r-1l-1c" [calendarGridData]="calendarGridNestedData">
-  <!-- Using [id] with a single row will apply the same id to multiple rows -->
-  <cr-calendar-grid-row [id]="" class="str">
+  <cr-calendar-grid-row>
     <ng-template crCalendarGridLabel let-l="label">
       <span class="stl">{{ l }}</span>
     </ng-template>
