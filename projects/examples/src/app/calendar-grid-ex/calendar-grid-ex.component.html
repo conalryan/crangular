@@ -48,15 +48,16 @@
 
 <h3>Single Nested Data</h3>
 
-<h4>No templates (use with primitive value)</h4>
+<!--<h4>No templates (use with primitive value)</h4>
 <cr-calendar-grid
   [calendarGridData]="calendarGridNestedData"
 ></cr-calendar-grid>
-<br /><br />
+<br /><br />-->
 
 <h4>1 row, 1 label, 1 cell</h4>
 <cr-calendar-grid id="g-1r-1l-1c" [calendarGridData]="calendarGridNestedData">
-  <cr-calendar-grid-row id="str" class="str">
+  <!-- Using [id] with a single row will apply the same id to multiple rows -->
+  <cr-calendar-grid-row [id]="" class="str">
     <ng-template crCalendarGridLabel let-l="label">
       <span class="stl">{{ l }}</span>
     </ng-template>
@@ -68,7 +69,7 @@
 
 <br /><br />
 
-<h4>2 rows, 1 label, 1 cell</h4>
+<!--<h4>2 rows, 1 label, 1 cell</h4>
 <cr-calendar-grid id="g-2r-1l-1c" [calendarGridData]="calendarGridNestedData">
   <cr-calendar-grid-row id="g2r1l1l-1">
     <ng-template crCalendarGridLabel let-l="label"> lr1 {{ l }} </ng-template>
@@ -83,7 +84,7 @@
       cr2 {{ c?.value }}
     </ng-template>
   </cr-calendar-grid-row>
-</cr-calendar-grid>
+</cr-calendar-grid>-->
 
 <br /><br />
 

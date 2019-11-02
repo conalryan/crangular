@@ -1,6 +1,17 @@
 import { ChangeDetectionStrategy, Component, ContentChildren, Directive, HostBinding, Input, OnChanges, QueryList, TemplateRef } from '@angular/core';
 import { BitMask, clearBit, getBit, prevSetBit, setBit } from '../bits/bits';
 
+/***********************************************************************
+ * Calendar grid
+ * - Based on [NgbTab](https://github.com/ng-bootstrap/ng-bootstrap/blob/master/src/tabset/tabset.ts)
+ * - NgbTabTitle    ~   CalendarGridLabelTplDirective
+ * - NgbTabContent  ~   CalendarGridCellTplDirective
+ * - NgbTab         ~   CalendarGridRowDirective
+ * - NgbTabset      ~   CalendarGridComponent
+ ************************************************************************/
+
+let nextId = 0;
+
 /**
  * A directive to wrap content to be displayed as the row label.
  * Exposes TemplateRef that can be used to project content.
@@ -35,14 +46,41 @@ export class CalendarGridCellTplDirective {
  * Adds common styling and exposes label and cell templates.
  */
 @Directive({selector: 'cr-calendar-grid-row'})
-export class CalendarGridRowDirective {
+export class CalendarGridRowDirective implements OnChanges {
+  /**
+   * The row identifier.
+   * Must be unique for the entire document for proper accessibility support.
+   */
+  @Input() id: string; // = `cr-row-${nextId++}`;
   // NOTE: List classes individually rather than combined e.g. @HostBinding('class') class = 'row mr-o ml-0';
   // Listing individually allows client to add classes @see CalendarGridComponent styles
   @HostBinding('class.row') row = 'row';
   @HostBinding('class.mr-0') mr = 'mr-0';
   @HostBinding('class.ml-0') ml = 'ml-0';
+
+
+  // @HostBinding('attr.id') attrId; // this.id; // FAIL: Does not apply based on input, rather it applies static string.
+
+  // WORKS: produces id="true"
+  // @HostBinding('attr.id') @Input() active = true;
+
+  // FAIL
+  // @HostBinding('attr.id') @Input() id;
+  @HostBinding('attr.id')
+  public get getId(): string {
+    console.log(`[getId]: ${this.id}`);
+  return this.id;
+}
+
   @ContentChildren(CalendarGridLabelTplDirective, {descendants: false}) labelTpls: QueryList<CalendarGridLabelTplDirective>;
   @ContentChildren(CalendarGridCellTplDirective, {descendants: false}) cellTpls: QueryList<CalendarGridCellTplDirective>;
+
+  ngOnChanges(): void {
+    console.log('[OnChanges');
+    // this.attrId = 'ha'; // this.id;
+    console.log(this.id);
+    // console.log(this.attrId);
+  }
 }
 
 /**
@@ -79,10 +117,11 @@ export interface CalendarGridCell<T> {
   date: Date;
   value: T;
 }
+
 export interface CalendarGridRow<T> {
   label: string;
   cells: CalendarGridCell<T>[];
-  node: CalendarGridRow<any>; // <any> Least restrictive: If it's nested it might be a different shape.
+  node?: CalendarGridRow<any>; // <any> Least restrictive: If it's nested it might be a different shape.
 }
 
 /**
@@ -93,6 +132,14 @@ export interface CalendarGridData {
   visibleRows: BitMask;
   parentRows: BitMask;
 }
+
+export const calendarGridDataInstance = (calendarGridRows: CalendarGridRow<any>[]): CalendarGridData  => {
+  return {
+    rows: calendarGridRows,
+    visibleRows: [0],
+    parentRows: [0]
+  };
+};
 
 export const flattenRows = (calendarGridData: CalendarGridData): CalendarGridRow<any>[] => {
   const rows: CalendarGridRow<any>[] = [];
@@ -139,13 +186,14 @@ export const toggleRowVisibility = (calendarGridData: CalendarGridData, calendar
   }
 };
 
-// ------------------------------------------- BitMask -------------------------------------------
+// ---------------------------------------- CalendarGrid -----------------------------------------
 
 @Component({
   selector: 'cr-calendar-grid',
   template: `
+  <!--[id]="calendarGridRow.id"-->
     <ng-container *ngFor="let calendarGridRow of allCalendarGridRows; let i = index">
-      <cr-calendar-grid-row *ngIf="isRowVisible(calendarGridData, i)" class="calendar-grid-row">
+      <cr-calendar-grid-row [id]="row(i).id" *ngIf="isRowVisible(calendarGridData, i)" class="calendar-grid-row">
 
         <cr-calendar-grid-label class="pr-2 calendar-grid-label" [ngStyle]="{'padding-left': paddingOffset(i)}">
           <span *ngIf="calendarGridRow.node && !isRowVisible(calendarGridData, i + 1)"
