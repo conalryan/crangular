@@ -31,7 +31,8 @@
 // 1 row, 1 label, 1 cell
 #g-1r-1l-1c {
   cr-calendar-grid-label {
-    background-color: #dddddd;
+    // WARNING: This will override [class]="'col-2 pr-2 blue-bg'" on <ng-template crCalendarGridLabel
+    // background-color: #dddddd;
   }
   cr-calendar-grid-cell {
     color: #3a3a3a;
@@ -91,9 +92,9 @@
 // ----------------------------- Cell styles -----------------------------
 
 // Doesn't fill the entire container, looks like crap.
-// .stl {
-//   background-color: #d2d2d2;
-// }
+.stl {
+  background-color: #d2d2d2;
+}
 
 // Applies to all elements
 // cr-calendar-grid-label {
@@ -111,3 +112,7 @@
 // cr-calendar-grid-label.calendar-grid-label {
 //   background-color: #d2d2d2;
 // }
+
+.blue-bg {
+  background-color: blue;
+}

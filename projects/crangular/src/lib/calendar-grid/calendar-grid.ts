@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ContentChildren, Directive, HostBinding, Input, OnChanges, QueryList, TemplateRef } from '@angular/core';
-import { BitMask, clearBit, getBit, prevSetBit, setBit } from '../bits/bits';
+import { BitMask, clearBit, getBit, prevSetBit, setBit, bitMask } from '../bits/bits';
 
 /***********************************************************************
  * Calendar grid
@@ -18,6 +18,7 @@ let nextId = 0;
  */
 @Directive({selector: 'ng-template[crCalendarGridLabel]'})
 export class CalendarGridLabelTplDirective {
+  @Input() class = 'col-2 pr-2';
   constructor(public templateRef: TemplateRef<any>) {}
 }
 
@@ -26,9 +27,7 @@ export class CalendarGridLabelTplDirective {
  */
 @Directive({selector: 'cr-calendar-grid-label'})
 export class CalendarGridLabelElmDirective {
-  // NOTE: List classes individually rather than combined e.g. @HostBinding('class') class = 'row mr-o ml-0';
-  // Listing individually allows client to add classes @see CalendarGridComponent styles
-  @HostBinding('class.col-2') col = 'col-2';
+  @HostBinding('class') @Input() class = 'col-2 pr-2';
   constructor() {}
 }
 
@@ -38,18 +37,8 @@ export class CalendarGridLabelElmDirective {
  */
 @Directive({selector: 'ng-template[crCalendarGridCell]'})
 export class CalendarGridCellTplDirective {
+  @Input() class;
   constructor(public templateRef: TemplateRef<any>) {}
-}
-
-/**
- * A directive representing an individual row.
- * Adds common styling and exposes label and cell templates.
- */
-@Directive({selector: 'cr-calendar-grid-row'})
-export class CalendarGridRowDirective {
-  @HostBinding('class') @Input() class = 'row mr-0 ml-0';
-  @ContentChildren(CalendarGridLabelTplDirective, {descendants: false}) labelTpls: QueryList<CalendarGridLabelTplDirective>;
-  @ContentChildren(CalendarGridCellTplDirective, {descendants: false}) cellTpls: QueryList<CalendarGridCellTplDirective>;
 }
 
 /**
@@ -58,7 +47,7 @@ export class CalendarGridRowDirective {
 @Component({
   selector: 'cr-calendar-grid-cell',
   template: `
-    <div class="flex-grow-1 calendar-grid-cell">
+    <div class="calendar-grid-cell flex-grow-1">
       <ng-content></ng-content>
     </div>
   `,
@@ -72,11 +61,24 @@ export class CalendarGridRowDirective {
 export class CalendarGridCellComponent {
   // NOTE: List classes individually rather than combined e.g. @HostBinding('class') class = 'row mr-o ml-0';
   // Listing individually allows client to add classes @see CalendarGridComponent styles
-  @HostBinding('class.col') col = 'col';
-  @HostBinding('class.d-flex') dflex = 'd-flex';
-  @HostBinding('class.pl-2') pl = 'pl-2';
-  @HostBinding('class.pr-2') pr = 'pr-2';
+  // @HostBinding('class.col') col = 'col';
+  // @HostBinding('class.d-flex') dflex = 'd-flex';
+  // @HostBinding('class.pl-2') pl = 'pl-2';
+  // @HostBinding('class.pr-2') pr = 'pr-2';
+  @Input() class = 'pl-2 pr-2';
+  @HostBinding('class') get clazz(): string { return 'col d-flex ' + this.class; }
   constructor() { }
+}
+
+/**
+ * A directive representing an individual row.
+ * Adds common styling and exposes label and cell templates.
+ */
+@Directive({selector: 'cr-calendar-grid-row'})
+export class CalendarGridRowDirective {
+  @HostBinding('class') @Input() class = 'row mr-0 ml-0';
+  @ContentChildren(CalendarGridLabelTplDirective, {descendants: false}) labelTpls: QueryList<CalendarGridLabelTplDirective>;
+  @ContentChildren(CalendarGridCellTplDirective, {descendants: false}) cellTpls: QueryList<CalendarGridCellTplDirective>;
 }
 
 // ------------------------------------------ Interface ------------------------------------------
@@ -105,8 +107,8 @@ export interface CalendarGridData {
 export const calendarGridDataInstance = (calendarGridRows: CalendarGridRow<any>[]): CalendarGridData  => {
   return {
     rows: calendarGridRows,
-    visibleRows: [0],
-    parentRows: [0]
+    visibleRows: bitMask(),
+    parentRows: bitMask()
   };
 };
 
@@ -161,9 +163,9 @@ export const toggleRowVisibility = (calendarGridData: CalendarGridData, calendar
   selector: 'cr-calendar-grid',
   template: `
     <ng-container *ngFor="let calendarGridRow of allCalendarGridRows; let i = index">
-      <cr-calendar-grid-row *ngIf="isRowVisible(calendarGridData, i)" [class]="'calendar-grid-row ' + row(i).class">
+      <cr-calendar-grid-row [class]="'calendar-grid-row ' + row(i).class" *ngIf="isRowVisible(calendarGridData, i)">
 
-        <cr-calendar-grid-label class="pr-2 calendar-grid-label" [ngStyle]="{'padding-left': paddingOffset(i)}">
+        <cr-calendar-grid-label [class]="'calendar-grid-label ' + template(i, 'labelTpls')?.class" [ngStyle]="{'padding-left': paddingOffset(i)}">
           <span *ngIf="calendarGridRow.node && !isRowVisible(calendarGridData, i + 1)"
             class="pr-2"
             (click)="toggleRowVisibility(calendarGridData, calendarGridRow, i)">O
@@ -176,7 +178,7 @@ export const toggleRowVisibility = (calendarGridData: CalendarGridData, calendar
           <ng-container *ngTemplateOutlet="template(i, 'labelTpls')?.templateRef;context:{label:calendarGridRow.label}"></ng-container>
         </cr-calendar-grid-label>
 
-        <cr-calendar-grid-cell *ngFor="let calendarCell of calendarGridRow.cells">
+        <cr-calendar-grid-cell [class]="'calendar-grid-cell ' + template(i, 'cellTpls')?.class" *ngFor="let calendarCell of calendarGridRow.cells">
           <ng-container *ngIf="!template(i, 'cellTpls')">{{ calendarCell.value }}</ng-container>
           <ng-container *ngTemplateOutlet="template(i, 'cellTpls')?.templateRef;context:{cell:calendarCell}"></ng-container>
         </cr-calendar-grid-cell>

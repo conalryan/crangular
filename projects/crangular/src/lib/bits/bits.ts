@@ -10,6 +10,10 @@
  */
 export type BitMask = number[];
 
+export const bitMask = (): BitMask => {
+  return [0];
+};
+
 export const printBits = (n: number): string => {
   const bitStr = n.toString(2);
   console.log(`[bits]: ${bitStr}`);
