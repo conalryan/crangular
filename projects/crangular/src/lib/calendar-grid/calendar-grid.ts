@@ -190,10 +190,22 @@ export class CalendarGridData {
     }
     // Expand a child row (i.e. ++index), no need to expand grand child rows
     if (!this.isRowVisible(++index)) {
-      const nodesLen = index + calendarGridRow.nodes.length;
-      for (let i = index; i < nodesLen; i++) {
-        setBit(this._visibleRows, i);
-      }
+      // Loop nested rows (i.e. children and grandchildren...)
+      const expand = (nodes: CalendarGridRow<any>[], bypassSet = false): void => {
+        nodes.forEach(node => {
+          // Expand this row, then increment the index (i.e. index++)
+          if (!bypassSet) {
+            setBit(this._visibleRows, index);
+          }
+          index++;
+          if (isNotEmpty(node.nodes)) {
+            // Don't expand nested data, however we need to traverse to maintain the proper indices.
+            // TODO is there a more efficient way to do this?
+            expand(node.nodes, true);
+          }
+        });
+      };
+      expand(calendarGridRow.nodes);
     } else {
       // Collapse all nested rows (i.e. children and grandchildren...)
       const collapse = (nodes: CalendarGridRow<any>[]): void => {
@@ -211,8 +223,20 @@ export class CalendarGridData {
     }
   }
 
+  /**
+   * Return an array of numbers where the length of the array is the number of levels (aka nested rows) and
+   * the value in each index is the index of the corresponding row.
+   * e.g.
+   * parent         [0]
+   *  child         [0,0]
+   *    grandchild  [0,0,0]
+   *    grandchild  [0,0,1]
+   *  child         [0,1]
+   *    grandchild  [0,1,0]
+   *    grandchild  [0,1,1]
+   */
   levels(index: number): number[] {
-    let levels = [0]; // Length of array is the number of levels, each value is the corresponding index.
+    let levels = [0];
     const parentOffset = prevSetBit(this._parentRows, index);
     if (parentOffset === 0) {
       return levels;
@@ -236,6 +260,7 @@ export class CalendarGridData {
         }
       }
     };
+    // Start at the closest parent row.
     const row = this._flatRows[index - parentOffset];
     levelsFn(row.nodes, 1);
     return levels;
