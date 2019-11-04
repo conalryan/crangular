@@ -66,7 +66,8 @@ export class CalendarGridCellComponent {
   // @HostBinding('class.pl-2') pl = 'pl-2';
   // @HostBinding('class.pr-2') pr = 'pr-2';
   @Input() class = 'pl-2 pr-2';
-  @HostBinding('class') get clazz(): string { return 'col d-flex ' + this.class; }
+  @HostBinding('class')
+  get clazz(): string { return 'col d-flex ' + this.class; }
   constructor() { }
 }
 
@@ -178,10 +179,10 @@ export const toggleRowVisibility = (calendarGridData: CalendarGridData, calendar
           <ng-container *ngTemplateOutlet="template(i, 'labelTpls')?.templateRef;context:{label:calendarGridRow.label}"></ng-container>
         </cr-calendar-grid-label>
 
-        <cr-calendar-grid-cell [class]="'calendar-grid-cell ' + template(i, 'cellTpls')?.class" *ngFor="let calendarCell of calendarGridRow.cells">
+        <ng-container *ngFor="let calendarCell of calendarGridRow.cells">
           <ng-container *ngIf="!template(i, 'cellTpls')">{{ calendarCell.value }}</ng-container>
           <ng-container *ngTemplateOutlet="template(i, 'cellTpls')?.templateRef;context:{cell:calendarCell}"></ng-container>
-        </cr-calendar-grid-cell>
+        </ng-container>
 
       </cr-calendar-grid-row>
     </ng-container>

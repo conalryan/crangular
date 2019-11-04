@@ -8,7 +8,7 @@ import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData 
   styleUrls: ['./calendar-grid-ex.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class CalendarGridExComponent implements AfterContentChecked {
+export class CalendarGridExComponent {
 
   calendarGridData: CalendarGridData = calendarGridData();
 
@@ -18,19 +18,7 @@ export class CalendarGridExComponent implements AfterContentChecked {
 
   constructor() {}
 
-  clazz = '';
-
   cellClass(cell: any): string {
-    console.log(cell); // Always undefined?
-
-
-    // return 'blue-bg'; WORKS
-
-    return cell && cell.value === 'true' ? 'blue-bg' : '';
-
-  }
-
-  ngAfterContentChecked() {
-    this.clazz = 'blue-bg';
+    return cell && cell.value === true ? 'blue-bg' : '';
   }
 }

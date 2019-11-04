@@ -60,9 +60,10 @@
     <ng-template crCalendarGridLabel let-l="label" [class]="'col-2 pr-2 blue-bg'">
       <span class="stl">{{ l }}</span>
     </ng-template>
-    <ng-template crCalendarGridCell let-c="cell" [class]="clazz">
-      {{ c?.value?.toString() | uppercase }}
-      {{ cellClass(c) }}
+    <ng-template crCalendarGridCell let-c="cell">
+      <cr-calendar-grid-cell [class]="cellClass(c)">
+        {{ c?.value?.toString() | uppercase }}
+      </cr-calendar-grid-cell>
     </ng-template>
   </cr-calendar-grid-row>
 </cr-calendar-grid>
