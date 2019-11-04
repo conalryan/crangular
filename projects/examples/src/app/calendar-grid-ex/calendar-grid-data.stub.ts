@@ -1,4 +1,4 @@
-import { CalendarGridCell, CalendarGridData, CalendarGridRow } from '../../../../crangular/src/lib/calendar-grid/calendar-grid';
+import { CalendarGridCell, CalendarGridRow, CalendarGridData } from '../../../../crangular/src/lib/calendar-grid/calendar-grid';
 
 export const strCells = (): CalendarGridCell<string>[] => {
   return [
@@ -53,27 +53,19 @@ export const calendarGridRows = (): CalendarGridRow<any>[] => {
     {
       label: 'Row 1',
       cells: strCells(),
-      node: undefined
+      nodes: undefined
     },
     {
       label: 'Row 2',
       cells: numCells(),
-      node: undefined
+      nodes: undefined
     },
     {
       label: 'Row 3',
       cells: boolCells(),
-      node: undefined
+      nodes: undefined
     }
   ];
-};
-
-export const calendarGridData = (): CalendarGridData => {
-  return {
-    rows: calendarGridRows(),
-    visibleRows: [0],
-    parentRows: [0]
-  };
 };
 
 export const calendarGridSingleNestRows = (): CalendarGridRow<any>[] => {
@@ -81,39 +73,31 @@ export const calendarGridSingleNestRows = (): CalendarGridRow<any>[] => {
     {
       label: 'Row 1',
       cells: strCells(),
-      node: {
+      nodes: [{
         label: 'Sub 1 a',
         cells: numCells(),
-        node: undefined
-      }
+        nodes: undefined
+      }]
     },
     {
       label: 'Row 2',
       cells: numCells(),
-      node: {
+      nodes: [{
         label: 'Sub 2 a',
         cells: boolCells(),
-        node: undefined
-      }
+        nodes: undefined
+      }]
     },
     {
       label: 'Row 3',
       cells: boolCells(),
-      node: {
+      nodes: [{
         label: 'Sub 3 a',
         cells: strCells(),
-        node: undefined
-      }
+        nodes: undefined
+      }]
     }
   ];
-};
-
-export const calendarGridNestedData = (): CalendarGridData => {
-  return {
-    rows: calendarGridSingleNestRows(),
-    visibleRows: [0],
-    parentRows: [0]
-  };
 };
 
 export const calendarGridDoubleNestRows = (): CalendarGridRow<any>[] => {
@@ -121,49 +105,41 @@ export const calendarGridDoubleNestRows = (): CalendarGridRow<any>[] => {
     {
       label: 'Row 1',
       cells: strCells(),
-      node: {
+      nodes: [{
         label: 'Sub 1 a',
         cells: numCells(),
-        node: {
+        nodes: [{
           label: 'Sub Sub 1 a 1',
           cells: boolCells(),
-          node: undefined
-        }
-      }
+          nodes: undefined
+        }]
+      }]
     },
     {
       label: 'Row 2',
       cells: strCells(),
-      node: {
+      nodes: [{
         label: 'Sub 2 a',
         cells: numCells(),
-        node: {
+        nodes: [{
           label: 'Sub Sub 2 a 1',
           cells: boolCells(),
-          node: undefined
-        }
-      }
+          nodes: undefined
+        }]
+      }]
     },
     {
       label: 'Row 3',
       cells: strCells(),
-      node: {
+      nodes: [{
         label: 'Sub 3 a',
         cells: numCells(),
-        node: {
+        nodes: [{
           label: 'Sub Sub 3 a 1',
           cells: boolCells(),
-          node: undefined
-        }
-      }
+          nodes: undefined
+        }]
+      }]
     }
   ];
-};
-
-export const calendarGridDoubleNestedData = (): CalendarGridData => {
-  return {
-    rows: calendarGridDoubleNestRows(),
-    visibleRows: [0],
-    parentRows: [0]
-  };
 };
