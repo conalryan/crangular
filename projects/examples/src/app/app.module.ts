@@ -1,20 +1,32 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { BrowserModule } from '@angular/platform-browser';
+import { BitsModule } from '../../../crangular/src/lib/bits/bits.module';
+import { CalendarGridModule } from '../../../crangular/src/lib/calendar-grid/calendar-grid.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CalendarGridModule } from '../../../crangular/src/lib/calendar-grid/calendar-grid.module';
-import { BitsModule } from '../../../crangular/src/lib/bits/bits.module';
 import { BitsExComponent } from './bits-ex/bits-ex.component';
 import { CalendarGridExComponent } from './calendar-grid-ex/calendar-grid-ex.component';
+import { NoTemplatesComponent } from './calendar-grid-ex/no-templates.component';
+import { PartsComponent } from './calendar-grid-ex/parts.component';
+import { SingleTemplatePerLevelComponent } from './calendar-grid-ex/single-template-per-level.component';
+import { SingleTemplateComponent } from './calendar-grid-ex/single-template.component';
+import { TemplatePerParentComponent } from './calendar-grid-ex/template-per-parent.component';
+import { TemplatePerRowComponent } from './calendar-grid-ex/template-per-row.component';
 import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     CalendarGridExComponent,
     BitsExComponent,
-    SizeofExComponent
+    SizeofExComponent,
+    NoTemplatesComponent,
+    PartsComponent,
+    SingleTemplateComponent,
+    SingleTemplatePerLevelComponent,
+    TemplatePerRowComponent,
+    TemplatePerParentComponent
   ],
   imports: [
     BrowserModule,

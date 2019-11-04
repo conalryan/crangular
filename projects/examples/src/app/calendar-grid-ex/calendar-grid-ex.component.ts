@@ -1,24 +1,19 @@
-import { Component, ViewEncapsulation, AfterContentChecked } from '@angular/core';
-import { CalendarGridData } from '../../../../crangular/src/lib/calendar-grid/calendar-grid';
-import { calendarGridData, calendarGridNestedData, calendarGridDoubleNestedData } from './calendar-grid-data.stub';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'cr-calendar-grid-ex',
-  templateUrl: './calendar-grid-ex.component.html',
-  styleUrls: ['./calendar-grid-ex.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  template: `
+    <h2>Calendar Grid</h2>
+    <ul>
+      <li><a [routerLink]="['/calendar-grid/parts']">Parts</a></li>
+      <li><a [routerLink]="['/calendar-grid/no-templates']">No templates</a></li>
+      <li><a [routerLink]="['/calendar-grid/single-template']">Single template</a></li>
+      <li><a [routerLink]="['/calendar-grid/single-template-per-level']">Single template per Level</a></li>
+      <li><a [routerLink]="['/calendar-grid/template-per-row']">Template per Row</a></li>
+      <li><a [routerLink]="['/calendar-grid/template-per-parent']">Template per Parent</a></li>
+    </ul>
+  `
 })
 export class CalendarGridExComponent {
-
-  calendarGridData: CalendarGridData = calendarGridData();
-
-  calendarGridNestedData: CalendarGridData = calendarGridNestedData();
-
-  calendarGridDoubleNestedData: CalendarGridData = calendarGridDoubleNestedData();
-
   constructor() {}
-
-  cellClass(cell: any): string {
-    return cell && cell.value === true ? 'blue-bg' : '';
-  }
 }
