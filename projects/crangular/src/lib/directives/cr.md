@@ -150,5 +150,3 @@ export class StructuralDirective implements OnInit {
   structural directives works!
 </p>
 ```
-
-## Add 
