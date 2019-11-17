@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { BitsModule } from '../../../crangular/src/lib/bits/bits.module';
 import { CalendarGridModule } from '../../../crangular/src/lib/calendar-grid/calendar-grid.module';
+import { DirectivesModule } from '../../../crangular/src/lib/directives/directives.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BitsExComponent } from './bits-ex/bits-ex.component';
@@ -12,10 +14,10 @@ import { SingleTemplatePerLevelComponent } from './calendar-grid-ex/single-templ
 import { SingleTemplateComponent } from './calendar-grid-ex/single-template.component';
 import { TemplatePerParentComponent } from './calendar-grid-ex/template-per-parent.component';
 import { TemplatePerRowComponent } from './calendar-grid-ex/template-per-row.component';
+import { DirectivesExComponent } from './directives-ex/directives-ex.component';
 import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
 import { DirectivesExComponent } from './directives-ex/directives-ex.component';
 import { DirectivesModule } from '../../../crangular/src/lib/directives/directives.module';
-
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { DirectivesModule } from '../../../crangular/src/lib/directives/directiv
   ],
   imports: [
     BrowserModule,
+    NgbDatepickerModule,
     BitsModule,
     CalendarGridModule,
     DirectivesModule,
