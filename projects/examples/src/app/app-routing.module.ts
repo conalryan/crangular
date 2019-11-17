@@ -6,9 +6,10 @@ import { NoTemplatesComponent } from './calendar-grid-ex/no-templates.component'
 import { PartsComponent } from './calendar-grid-ex/parts.component';
 import { SingleTemplatePerLevelComponent } from './calendar-grid-ex/single-template-per-level.component';
 import { SingleTemplateComponent } from './calendar-grid-ex/single-template.component';
-import { TemplatePerRowComponent } from './calendar-grid-ex/template-per-row.component';
-import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
 import { TemplatePerParentComponent } from './calendar-grid-ex/template-per-parent.component';
+import { TemplatePerRowComponent } from './calendar-grid-ex/template-per-row.component';
+import { DirectivesExComponent } from './directives-ex/directives-ex.component';
+import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'calendar-grid', pathMatch: 'full' },
@@ -43,6 +44,10 @@ const routes: Routes = [
   {
     path: 'calendar-grid/template-per-parent',
     component: TemplatePerParentComponent
+  },
+  {
+    path: 'directives',
+    component: DirectivesExComponent
   },
   {
     path: 'sizeof',

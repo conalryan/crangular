@@ -13,6 +13,8 @@ import { SingleTemplateComponent } from './calendar-grid-ex/single-template.comp
 import { TemplatePerParentComponent } from './calendar-grid-ex/template-per-parent.component';
 import { TemplatePerRowComponent } from './calendar-grid-ex/template-per-row.component';
 import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
+import { DirectivesExComponent } from './directives-ex/directives-ex.component';
+import { DirectivesModule } from '../../../crangular/src/lib/directives/directives.module';
 
 
 @NgModule({
@@ -26,12 +28,14 @@ import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
     SingleTemplateComponent,
     SingleTemplatePerLevelComponent,
     TemplatePerRowComponent,
-    TemplatePerParentComponent
+    TemplatePerParentComponent,
+    DirectivesExComponent
   ],
   imports: [
     BrowserModule,
     BitsModule,
     CalendarGridModule,
+    DirectivesModule,
     AppRoutingModule
   ],
   providers: [],
