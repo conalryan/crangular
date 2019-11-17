@@ -6,9 +6,13 @@ import { NoTemplatesComponent } from './calendar-grid-ex/no-templates.component'
 import { PartsComponent } from './calendar-grid-ex/parts.component';
 import { SingleTemplatePerLevelComponent } from './calendar-grid-ex/single-template-per-level.component';
 import { SingleTemplateComponent } from './calendar-grid-ex/single-template.component';
-import { TemplatePerRowComponent } from './calendar-grid-ex/template-per-row.component';
-import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
 import { TemplatePerParentComponent } from './calendar-grid-ex/template-per-parent.component';
+import { TemplatePerRowComponent } from './calendar-grid-ex/template-per-row.component';
+import { DirectivesExComponent } from './directives-ex/directives-ex.component';
+import { NgbDatepicker3MonthExComponent } from './ngb-datepicker-ex/ngb-datepicker-3-month-ex.component';
+import { NgbDatepicker6MonthExComponent } from './ngb-datepicker-ex/ngb-datepicker-6-month-ex.component';
+import { NgbDatepickerPerMonthExComponent } from './ngb-datepicker-ex/ngb-datepicker-per-month-ex.component';
+import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'calendar-grid', pathMatch: 'full' },
@@ -43,6 +47,22 @@ const routes: Routes = [
   {
     path: 'calendar-grid/template-per-parent',
     component: TemplatePerParentComponent
+  },
+  {
+    path: 'directives',
+    component: DirectivesExComponent
+  },
+  {
+    path: 'ngb-datepicker-3-month',
+    component: NgbDatepicker3MonthExComponent
+  },
+  {
+    path: 'ngb-datepicker-6-month',
+    component: NgbDatepicker6MonthExComponent
+  },
+  {
+    path: 'ngb-datepicker-per-month',
+    component: NgbDatepickerPerMonthExComponent
   },
   {
     path: 'sizeof',
