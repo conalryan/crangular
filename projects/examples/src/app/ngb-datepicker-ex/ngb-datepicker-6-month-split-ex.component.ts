@@ -4,8 +4,9 @@ import { CalendarGridCell } from '../../../../crangular/src/lib/calendar-grid/ca
 import { DateUtil } from '../../../../crangular/src/lib/util/date.util';
 
 @Component({
-  selector: 'cr-ngb-datepicker-6-month-ex',
+  selector: 'cr-ngb-datepicker-6-month-split-ex',
   template: `
+    <div class="row">
     <ngb-datepicker
       class="dp"
       [dayTemplate]="customDay"
@@ -19,7 +20,7 @@ import { DateUtil } from '../../../../crangular/src/lib/util/date.util';
       (navigate)="onNavigate($event)"
       (select)="onSelect($event)">
     </ngb-datepicker>
-
+    </div>
     <ng-template #customDay let-date let-currentMonth="currentMonth" let-selected="selected" let-disabled="disabled" let-focused="focused">
       <span class="custom-day">
         <span class="d-block">{{ date.day }}</span>
@@ -56,7 +57,7 @@ import { DateUtil } from '../../../../crangular/src/lib/util/date.util';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
-export class NgbDatepicker6MonthExComponent implements AfterViewInit {
+export class NgbDatepicker6MonthSplitExComponent implements AfterViewInit {
 
   cells: CalendarGridCell<number>[] = [];
   minNov = new NgbDate(2019, 11, 1);
@@ -87,22 +88,40 @@ export class NgbDatepicker6MonthExComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    const ngbDatepickerNode = this._elementRef.nativeElement.childNodes[0];
+    const ngbDatepickerNode = this._elementRef.nativeElement.childNodes[0].childNodes[0];
+    
+    const month1 = ngbDatepickerNode.childNodes[2].childNodes[1];
+    const month2 = ngbDatepickerNode.childNodes[2].childNodes[2];
+    const month3 = ngbDatepickerNode.childNodes[2].childNodes[3];
+    
     const month4 = ngbDatepickerNode.childNodes[2].childNodes[4];
     const month5 = ngbDatepickerNode.childNodes[2].childNodes[5];
     const month6 = ngbDatepickerNode.childNodes[2].childNodes[6];
 
-    const currentParent = ngbDatepickerNode.childNodes[2];
-    this._renderer.removeChild(currentParent, month4);
-    this._renderer.removeChild(currentParent, month5);
-    this._renderer.removeChild(currentParent, month6);
+    const ngbDpMonth = ngbDatepickerNode.childNodes[2];
+    this._renderer.removeChild(ngbDpMonth, month1);
+    this._renderer.removeChild(ngbDpMonth, month2);
+    this._renderer.removeChild(ngbDpMonth, month3);
 
-    const newParent = this._renderer.createElement('div');
-    this._renderer.addClass(newParent, 'ngb-dp-months');
-    this._renderer.appendChild(ngbDatepickerNode, newParent);
-    this._renderer.appendChild(newParent, month4);
-    this._renderer.appendChild(newParent, month5);
-    this._renderer.appendChild(newParent, month6);
+    this._renderer.removeChild(ngbDpMonth, month4);
+    this._renderer.removeChild(ngbDpMonth, month5);
+    this._renderer.removeChild(ngbDpMonth, month6);
+
+    const row = this._renderer.createElement('div');
+    this._renderer.addClass(row, 'row');
+    
+    this._renderer.appendChild(ngbDpMonth, row);
+    this._renderer.appendChild(row, month1);
+    this._renderer.appendChild(row, month2);
+    this._renderer.appendChild(row, month3);
+
+    const div = this._renderer.createElement('div');
+    this._renderer.addClass(div, 'w-100');
+    
+    this._renderer.appendChild(row, div);
+    this._renderer.appendChild(row, month4);
+    this._renderer.appendChild(row, month5);
+    this._renderer.appendChild(row, month6);
   }
 
   onNavigate($event): void {

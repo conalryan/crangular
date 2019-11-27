@@ -266,7 +266,8 @@ constructor(
 
 
 ### [NgbDatepickerKeyMapService](https://github.com/ng-bootstrap/ng-bootstrap/blob/4.2.2/src/datepicker/datepicker-keymap-service.ts#L8)
-
+- Keymap service is used up to including version 5.1.4 (latest version at time of writing)
+- Master branch switches to [`NgbDatepickerKeyboardService`](https://github.com/ng-bootstrap/ng-bootstrap/blob/master/src/datepicker/datepicker.ts#L427) which injects `this` however there is no release as it is on `master` branch.
 ```typescript
 constructor(
   private _service: NgbDatepickerService, 
