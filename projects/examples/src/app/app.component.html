@@ -1,2 +1,28 @@
-
-<router-outlet></router-outlet>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">crangular</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a class="nav-link" [routerLink]="['/bits']">bits</a></li>
+        <li class="nav-item"><a class="nav-link" [routerLink]="['/calendar']">calendar</a></li>
+        <li ngbDropdown class="nav-item">
+          <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="navbarDropdown1" role="button">
+              calendar-grid
+          </a>
+          <div ngbDropdownMenu aria-labelledby="navbarDropdown1" class="dropdown-menu">
+            <li><a ngbDropdownItem [routerLink]="['/calendar-grid/parts']">Parts</a></li>
+            <li><a ngbDropdownItem [routerLink]="['/calendar-grid/model']">Model</a></li>
+            <li><a ngbDropdownItem [routerLink]="['/calendar-grid/no-templates']">No templates</a></li>
+            <li><a ngbDropdownItem [routerLink]="['/calendar-grid/single-row-template']">Single row/template</a></li>
+            <li><a ngbDropdownItem [routerLink]="['/calendar-grid/multi-row-template']">Multi row/template</a></li>
+            <li><a ngbDropdownItem [routerLink]="['/calendar-grid/nested-row-template']">Nested row/template</a></li>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+<div class="container-fluid">
+  <router-outlet></router-outlet>
+</div>

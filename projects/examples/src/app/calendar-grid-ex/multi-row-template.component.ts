@@ -1,135 +1,135 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CalendarGridData } from '../../../../crangular/src/lib/calendar-grid/calendar-grid';
 import { calendarGridDoubleNestRows, calendarGridRows, calendarGridSingleNestRows } from './calendar-grid-data.stub';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'cr-template-per-parent',
+  selector: 'cr-mult-row-template',
   template: `
-    <h1><a [routerLink]="['/calendar-grid']">Calendar grid</a></h1>
+    <h3>Multi row/template</h3>
 
-    <h3>Template per Parent</h3>
+    <h4>Non-nested Data</h4>
+    <cr-calendar-grid [calendarGridData]="calendarGridData">
+      <cr-calendar-grid-row>
+        <ng-template crCalendarGridLabel let-l="label">
+          🏷️ {{ l }}
+        </ng-template>
+        <ng-template crCalendarGridCell let-c="cell">
+          🏨 {{ c?.value }}
+        </ng-template>
+      </cr-calendar-grid-row>
 
-    <h4>Single Nest</h4>
+      <cr-calendar-grid-row>
+        <ng-template crCalendarGridLabel let-l="label">
+          🔖 {{ l }}
+        </ng-template>
+        <ng-template crCalendarGridCell let-c="cell">
+          🚐 {{ c?.value }}
+        </ng-template>
+      </cr-calendar-grid-row>
+
+      <cr-calendar-grid-row>
+        <ng-template crCalendarGridLabel let-l="label">
+          📜 {{ l }}
+        </ng-template>
+        <ng-template crCalendarGridCell let-c="cell">
+          🛫 {{ c?.value }}
+        </ng-template>
+      </cr-calendar-grid-row>
+    </cr-calendar-grid>
+
+    <h4>Single Nested Data</h4>
     <cr-calendar-grid [calendarGridData]="calendarGridNestedData">
       <cr-calendar-grid-row>
         <ng-template crCalendarGridLabel let-l="label">
-          1️⃣ {{ l }}
+          🏷️ {{ l }}
         </ng-template>
         <ng-template crCalendarGridCell let-c="cell">
-          🌮 {{ c?.value }}
+          🏨 {{ c?.value }}
         </ng-template>
       </cr-calendar-grid-row>
 
       <cr-calendar-grid-row>
         <ng-template crCalendarGridLabel let-l="label">
-          2️⃣ {{ l }}
+          🔖 {{ l }}
         </ng-template>
         <ng-template crCalendarGridCell let-c="cell">
-          🏄‍♀️ {{ c?.value }}
+          🚐 {{ c?.value }}
         </ng-template>
       </cr-calendar-grid-row>
 
       <cr-calendar-grid-row>
         <ng-template crCalendarGridLabel let-l="label">
-          3️⃣ {{ l }}
+          📜 {{ l }}
         </ng-template>
         <ng-template crCalendarGridCell let-c="cell">
-          ⚽ {{ c?.value }}
+          🛫 {{ c?.value }}
         </ng-template>
       </cr-calendar-grid-row>
     </cr-calendar-grid>
 
-    <h4>Double Nest</h4>
+    <h4>Double Nested Data</h4>
     <cr-calendar-grid [calendarGridData]="calendarGridDoubleNestedData">
       <cr-calendar-grid-row>
         <ng-template crCalendarGridLabel let-l="label">
-          1️⃣ {{ l }}
+          🏷️ {{ l }}
         </ng-template>
         <ng-template crCalendarGridCell let-c="cell">
-          🌮 {{ c?.value }}
+          🏨 {{ c?.value }}
         </ng-template>
       </cr-calendar-grid-row>
 
       <cr-calendar-grid-row>
         <ng-template crCalendarGridLabel let-l="label">
-          2️⃣ {{ l }}
+          🔖 {{ l }}
         </ng-template>
         <ng-template crCalendarGridCell let-c="cell">
-          🏄‍♀️ {{ c?.value }}
+          🚐 {{ c?.value }}
         </ng-template>
       </cr-calendar-grid-row>
 
       <cr-calendar-grid-row>
         <ng-template crCalendarGridLabel let-l="label">
-          3️⃣ {{ l }}
+          📜 {{ l }}
         </ng-template>
         <ng-template crCalendarGridCell let-c="cell">
-          ⚽ {{ c?.value }}
+          🛫 {{ c?.value }}
         </ng-template>
       </cr-calendar-grid-row>
     </cr-calendar-grid>
 
-    <h4>Double Nest (Parent template, Child template)</h4>
-    <cr-calendar-grid [calendarGridData]="calendarGridDoubleNestedData">
-      <cr-calendar-grid-row>
-        <ng-template crCalendarGridLabel let-l="label">
-          1️⃣ {{ l }}
-        </ng-template>
-        <ng-template crCalendarGridCell let-c="cell">
-          🌮 {{ c?.value }}
-        </ng-template>
-        <!-- Child -->
-        <cr-calendar-grid-row>
-          <ng-template crCalendarGridLabel let-l="label">
-            2️⃣ {{ l }}
-          </ng-template>
-          <ng-template crCalendarGridCell let-c="cell">
-            🍭 {{ c?.value }}
-          </ng-template>
-        </cr-calendar-grid-row>
-      </cr-calendar-grid-row>
+    <pre>
+      <code>
+        &lt;cr-calendar-grid [calendarGridData]="calendarGridData"&gt;
+          &lt;cr-calendar-grid-row&gt;
+            &lt;ng-template crCalendarGridLabel let-l="label"&gt;🏷️ &#123; l &#125;&lt;/ng-template&gt;
+            &lt;ng-template crCalendarGridCell let-c="cell"&gt;🏨 &#123; c?.value &#125;&lt;/ng-template&gt;
+          &lt;/cr-calendar-grid-row&gt;
 
-      <cr-calendar-grid-row>
-        <ng-template crCalendarGridLabel let-l="label">
-          4️⃣ {{ l }}
-        </ng-template>
-        <ng-template crCalendarGridCell let-c="cell">
-          🎪‍ {{ c?.value }}
-        </ng-template>
-        <!-- Child -->
-        <cr-calendar-grid-row>
-          <ng-template crCalendarGridLabel let-l="label">
-            5️⃣ {{ l }}
-          </ng-template>
-          <ng-template crCalendarGridCell let-c="cell">
-            ⚽ {{ c?.value }}
-          </ng-template>
-        </cr-calendar-grid-row>
-      </cr-calendar-grid-row>
+          &lt;cr-calendar-grid-row&gt;
+            &lt;ng-template crCalendarGridLabel let-l="label"&gt;🔖 &#123; l &#125;&lt;/ng-template&gt;
+            &lt;ng-template crCalendarGridCell let-c="cell"&gt;🚐 &#123; c?.value &#125;&lt;/ng-template&gt;
+          &lt;/cr-calendar-grid-row&gt;
 
-      <cr-calendar-grid-row>
-        <ng-template crCalendarGridLabel let-l="label">
-          7️⃣ {{ l }}
-        </ng-template>
-        <ng-template crCalendarGridCell let-c="cell">
-          ⛺ {{ c?.value }}
-        </ng-template>
-        <!-- Child -->
-        <cr-calendar-grid-row>
-          <ng-template crCalendarGridLabel let-l="label">
-            8️⃣ {{ l }}
-          </ng-template>
-          <ng-template crCalendarGridCell let-c="cell">
-            🏢 {{ c?.value }}
-          </ng-template>
-        </cr-calendar-grid-row>
-      </cr-calendar-grid-row>
-    </cr-calendar-grid>
+          &lt;cr-calendar-grid-row&gt;
+            &lt;ng-template crCalendarGridLabel let-l="label"&gt;📜 &#123; l &#125;&lt;/ng-template&gt;
+            &lt;ng-template crCalendarGridCell let-c="cell"&gt;🛫 &#123; c?.value &#125;&lt;/ng-template&gt;
+          &lt;/cr-calendar-grid-row&gt;
+        &lt;/cr-calendar-grid&gt;
+      </code>
+    </pre>
   `,
-  styles: [],
+  styles: [`
+    h4 {
+      margin-top: 2rem;
+    }
+    pre {
+      background-color: #d2d2d2;
+      margin-top: 2rem;
+    }
+`],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TemplatePerParentComponent {
+export class MultiRowTemplateComponent {
 
   calendarGridData: CalendarGridData = new CalendarGridData(calendarGridRows());
   calendarGridNestedData: CalendarGridData = new CalendarGridData(calendarGridSingleNestRows());

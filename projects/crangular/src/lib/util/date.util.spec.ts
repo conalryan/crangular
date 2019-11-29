@@ -1,7 +1,4 @@
-import { DateChangeType } from '../model/date-change-type';
-import { DateIncrementField } from '../model/date-increment-field';
-import { DateRange } from '../model/date-range';
-import { DateUtil } from './date.util';
+import { DateChangeType, DateIncrementField, DateRange, DateUtil } from './date.util';
 
 describe('DateUtil', () => {
   it('can convert a date to a given day', () => {

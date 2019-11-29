@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, ContentChildren, Directive, HostBin
 import { BitMask, bitMask, clearBit, getBit, prevSetBit, setBit } from '../bits/bits';
 import { isNotEmpty } from '../util/array.util';
 import { DateUtil } from '../util/date.util';
+import { throwError } from 'rxjs';
 
 /***********************************************************************
  * Calendar grid
@@ -49,15 +50,13 @@ export class CalendarGridCellTplDirective {
       <ng-content></ng-content>
     </div>
   `,
-  styles: [
-    `
-      .calendar-grid-cell-content {
-        flex-basis: 0;
-        flex-grow: 1;
-        text-align: center;
-      }
-    `
-  ]
+  styles: [`
+    .calendar-grid-cell-content {
+      flex-basis: 0;
+      flex-grow: 1;
+      text-align: center;
+    }
+  `]
 })
 export class CalendarGridCellComponent {
   @HostBinding('style.display') display = 'flex';
@@ -86,7 +85,7 @@ export class CalendarGridRowDirective {
 // ------------------------------------------ Interface ------------------------------------------
 
 export interface CalendarGridCell<T> {
-  id: string;
+  label: string;
   date: Date;
   value: T;
 }
@@ -98,12 +97,12 @@ export interface CalendarGridRow<T> {
 }
 
 export class CalendarGridData {
+  private _rawRows: CalendarGridRow<any>[];
   private _rows: CalendarGridRow<any>[];
-  private _flatRows: CalendarGridRow<any>[];
   private _visibleRows: BitMask;
   private _parentRows: BitMask;
 
-  static cells = <T>(startDate: Date, numDays?: number, data?: T[], id?: string): CalendarGridCell<T>[] => {
+  static cells = <T>(label: string, startDate: Date, numDays?: number, data?: T[]): CalendarGridCell<T>[] => {
     const calendarGridCells: CalendarGridCell<T>[] = [];
     const length = numDays || (isNotEmpty(data) ? data.length : 0);
     for (let i = 0; i < length; i++) {
@@ -112,7 +111,7 @@ export class CalendarGridData {
         date.setDate(date.getDate() + i);
       }
       const cell: CalendarGridCell<T> = {
-        id: id,
+        label: label,
         date: date,
         value: isNotEmpty(data) ? data[i] : undefined
       };
@@ -124,25 +123,25 @@ export class CalendarGridData {
   static row = <T>(label: string, startDate: Date, numDays?: number, data?: T[]): CalendarGridRow<T> => {
     return {
       label: label,
-      cells: CalendarGridData.cells(startDate, numDays, data, label)
+      cells: CalendarGridData.cells(label, startDate, numDays, data)
     };
   }
 
   constructor(calendarGridRows: CalendarGridRow<any>[]) {
-    this._rows = calendarGridRows;
+    this._rawRows = calendarGridRows;
     this._visibleRows = bitMask();
     this._parentRows = bitMask();
     this._flattenRows();
   }
 
   private _flattenRows(): void {
-    this._flatRows = [];
+    this._rows = [];
     let totalIndex = 0;
-    const rowslen = this._rows.length;
+    const rowslen = this._rawRows.length;
     for (let i = 0; i < rowslen; i++) {
       // Parent Row
-      const row = this._rows[i];
-      this._flatRows.push(row);
+      const row = this._rawRows[i];
+      this._rows.push(row);
       setBit(this._visibleRows, totalIndex);
       setBit(this._parentRows, totalIndex);
       totalIndex++;
@@ -151,7 +150,7 @@ export class CalendarGridData {
         const nodesLen = nodes.length;
         for (let j = 0; j < nodesLen; j++) {
           const node = nodes[j];
-          this._flatRows.push(node);
+          this._rows.push(node);
           totalIndex++;
           if (isNotEmpty(node.nodes)) {
             flatten(node.nodes);  // Depth first
@@ -164,12 +163,12 @@ export class CalendarGridData {
     }
   }
 
-  get rows(): CalendarGridRow<any>[] {
-    return this._rows;
+  get rowsRaw(): CalendarGridRow<any>[] {
+    return this._rawRows;
   }
 
-  get flatRows(): CalendarGridRow<any>[] {
-    return this._flatRows;
+  get rows(): CalendarGridRow<any>[] {
+    return this._rows;
   }
 
   get visibleRows(): BitMask {
@@ -180,45 +179,71 @@ export class CalendarGridData {
     return this._parentRows;
   }
 
+  index(calendarGridRow: CalendarGridRow<any>): number {
+    return this._rows.findIndex(row => row === calendarGridRow);
+  }
+
   isRowVisible(index: number): boolean {
     return getBit(this._visibleRows, index) === 1;
   }
 
-  toggleRowVisibility(calendarGridRow: CalendarGridRow<any>, index: number) {
+  toggleRowVisibility(index: number): void {
+    if (!this.isRowVisible(index)) {
+      // No need to expand children automatically
+      setBit(this._visibleRows, index);
+    } else {
+      clearBit(this._visibleRows, index);
+      const calendarGridRow: CalendarGridRow<any> = this.rows[index];
+      if (isNotEmpty(calendarGridRow.nodes)) {
+        // Need to collapse children as well
+        this._collapse(calendarGridRow.nodes);
+      }
+    }
+  }
+
+  toggleNodesVisibility(index: number): void {
+    const calendarGridRow: CalendarGridRow<any> = this.rows[index];
     if (!calendarGridRow.nodes) {
       return; // No children to expand/collapse.
     }
     // Expand a child row (i.e. ++index), no need to expand grand child rows
     if (!this.isRowVisible(++index)) {
-      // Loop nested rows (i.e. children and grandchildren...)
-      const expand = (nodes: CalendarGridRow<any>[], bypassSet = false): void => {
-        nodes.forEach(node => {
-          // Expand this row, then increment the index (i.e. index++)
-          if (!bypassSet) {
-            setBit(this._visibleRows, index);
-          }
-          index++;
-          if (isNotEmpty(node.nodes)) {
-            // Don't expand nested data, however we need to traverse to maintain the proper indices.
-            // TODO is there a more efficient way to do this?
-            expand(node.nodes, true);
-          }
-        });
-      };
-      expand(calendarGridRow.nodes);
+      this._expand(calendarGridRow.nodes)    
     } else {
-      // Collapse all nested rows (i.e. children and grandchildren...)
-      const collapse = (nodes: CalendarGridRow<any>[]): void => {
-        nodes.forEach(node => {
-          // Collapse this row, then increment the index (i.e. index++)
-          clearBit(this._visibleRows, index++);
-          if (isNotEmpty(node.nodes)) {
-            collapse(node.nodes);
-          }
-        });
-      };
-      if (isNotEmpty(calendarGridRow.nodes)) {
-        collapse(calendarGridRow.nodes);
+      this._collapse(calendarGridRow.nodes);  
+    }
+  }
+
+  /**
+   * Collapse all nested rows (i.e. children and grandchildren...)
+   * Do not pass null | undefined as this function is called recursively.
+   * Save the call stack an extra trip and check nodes is not empty first.
+   */
+  private _collapse(nodes: CalendarGridRow<any>[], recursive = true): void {
+    const nodesLen = nodes.length;
+    for (let i = 0; i < nodesLen; i++) {
+      const node = nodes[i];
+      const index = this.index(node);
+      clearBit(this._visibleRows, index);
+      if (recursive && isNotEmpty(node.nodes)) {
+        this._collapse(node.nodes); // Depth first
+      }
+    }
+  };
+
+  /**
+   * Expand rows and optionally children and grandchildren
+   * Do not pass null | undefined as this function is called recursively.
+   * Save the call stack an extra trip and check nodes is not empty first.
+   */
+  private _expand(nodes: CalendarGridRow<any>[], recursive = false): void {
+    const nodesLen = nodes.length;
+    for (let i = 0; i < nodesLen; i++) {
+      const node = nodes[i];
+      const index = this.index(node);
+      setBit(this._visibleRows, index);
+      if (recursive && isNotEmpty(node.nodes)) {
+        this._collapse(node.nodes); // Depth first
       }
     }
   }
@@ -261,7 +286,7 @@ export class CalendarGridData {
       }
     };
     // Start at the closest parent row.
-    const row = this._flatRows[index - parentOffset];
+    const row = this._rows[index - parentOffset];
     levelsFn(row.nodes, 1);
     return levels;
   }
@@ -286,10 +311,10 @@ export const rowIndex = (calendarGridRows: CalendarGridRow<any>[], label: string
 @Component({
   selector: 'cr-calendar-grid',
   template: `
-    <ng-container *ngFor="let calendarGridRow of calendarGridData.flatRows; let i = index">
+    <ng-container *ngFor="let calendarGridRow of calendarGridData.rows; let i = index">
       <cr-calendar-grid-row *ngIf="calendarGridData.isRowVisible(i)">
         <cr-calendar-grid-label [ngStyle]="{ 'padding-left': paddingOffset(i) }"
-          (click)="calendarGridData.toggleRowVisibility(calendarGridRow, i)">
+          (click)="calendarGridData.toggleNodesVisibility(i)">
           <span *ngIf="calendarGridRow.nodes" class="small"
             [ngClass]="{
               'icon-chevron-right': !calendarGridData.isRowVisible(i + 1),
@@ -326,12 +351,12 @@ export class CalendarGridComponent {
     if (parentOffset === 0) {
       // It's a parent row
       // Find corresponding row template e.g. calendarGridData.rows[1] would assume rowTemplates[1] default rowTemplates.last
-      const parentIndex = rowIndex(this.calendarGridData.rows, calendarGridRow.label);
+      const parentIndex = rowIndex(this.calendarGridData.rowsRaw, calendarGridRow.label);
       rowTpl = this.rowTemplates.find((row, idx, rows) => idx === parentIndex) || this.rowTemplates.last;
     } else {
       // Find corresponding parent template
-      const parentRow = this.calendarGridData.flatRows[index - parentOffset];
-      const parentIndex = rowIndex(this.calendarGridData.rows, parentRow.label);
+      const parentRow = this.calendarGridData.rows[index - parentOffset];
+      const parentIndex = rowIndex(this.calendarGridData.rowsRaw, parentRow.label);
       rowTpl = this.rowTemplates.find((row, idx, rows) => idx === parentIndex) || this.rowTemplates.last;
       // Client may not be using any row templates
       if (rowTpl) {
