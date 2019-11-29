@@ -13,6 +13,7 @@ import { NgbDatepicker3MonthExComponent } from './ngb-datepicker-ex/ngb-datepick
 import { NgbDatepicker6MonthExComponent } from './ngb-datepicker-ex/ngb-datepicker-6-month-ex.component';
 import { NgbDatepicker6MonthSplitExComponent } from './ngb-datepicker-ex/ngb-datepicker-6-month-split-ex.component';
 import { NgbDatepickerPerMonthExComponent } from './ngb-datepicker-ex/ngb-datepicker-per-month-ex.component';
+import { NgbDatepickerScaleExComponent } from './ngb-datepicker-scale-ex/ngb-datepicker-scale-ex.component';
 import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
 
 const routes: Routes = [
@@ -68,6 +69,10 @@ const routes: Routes = [
   {
     path: 'ngb-datepicker-per-month',
     component: NgbDatepickerPerMonthExComponent
+  },
+  {
+    path: 'ngb-datepicker-scale',
+    component: NgbDatepickerScaleExComponent
   },
   {
     path: 'sizeof',

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerScaleModule } from 'projects/crangular/src/lib/ngb-datepicker-scale/ngb-datepicker-scale.module';
 import { BitsModule } from '../../../crangular/src/lib/bits/bits.module';
 import { CalendarGridModule } from '../../../crangular/src/lib/calendar-grid/calendar-grid.module';
 import { DirectivesModule } from '../../../crangular/src/lib/directives/directives.module';
@@ -19,6 +20,7 @@ import { NgbDatepicker3MonthExComponent } from './ngb-datepicker-ex/ngb-datepick
 import { NgbDatepicker6MonthExComponent } from './ngb-datepicker-ex/ngb-datepicker-6-month-ex.component';
 import { NgbDatepicker6MonthSplitExComponent } from './ngb-datepicker-ex/ngb-datepicker-6-month-split-ex.component';
 import { NgbDatepickerPerMonthExComponent } from './ngb-datepicker-ex/ngb-datepicker-per-month-ex.component';
+import { NgbDatepickerScaleExComponent } from './ngb-datepicker-scale-ex/ngb-datepicker-scale-ex.component';
 import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
 
 @NgModule({
@@ -37,7 +39,8 @@ import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
     NgbDatepicker3MonthExComponent,
     NgbDatepicker6MonthExComponent,
     NgbDatepickerPerMonthExComponent,
-    NgbDatepicker6MonthSplitExComponent
+    NgbDatepicker6MonthSplitExComponent,
+    NgbDatepickerScaleExComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +48,7 @@ import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
     BitsModule,
     CalendarGridModule,
     DirectivesModule,
+    NgbDatepickerScaleModule,
     AppRoutingModule
   ],
   providers: [],
