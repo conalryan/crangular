@@ -5,20 +5,40 @@ import { calendarGridDoubleNestRows, calendarGridRows, calendarGridSingleNestRow
 @Component({
   selector: 'cr-no-templates',
   template: `
-    <h1><a [routerLink]="['/calendar-grid']">Calendar grid</a></h1>
-
     <h3>No templates (simple interpolation)</h3>
 
     <h4>Non-nested Data</h4>
     <cr-calendar-grid [calendarGridData]="calendarGridData"></cr-calendar-grid>
+    <pre>
+      <code>
+        &lt;cr-calendar-grid [calendarGridData]="calendarGridData"&gt;&lt;/cr-calendar-grid&gt;
+      </code>
+    </pre>
 
-    <h4>Single Nest</h4>
+    <h4>Single Nested Data</h4>
     <cr-calendar-grid [calendarGridData]="calendarGridNestedData"></cr-calendar-grid>
+    <pre>
+      <code>
+        &lt;cr-calendar-grid [calendarGridData]="calendarGridNestedData"&gt;&lt;/cr-calendar-grid&gt;
+      </code>
+    </pre>
 
-    <h4>Double Nest</h4>
+    <h4>Double Nested Data</h4>
     <cr-calendar-grid [calendarGridData]="calendarGridDoubleNestedData"></cr-calendar-grid>
+    <pre>
+      <code>
+        &lt;cr-calendar-grid [calendarGridData]="calendarGridDoubleNestedData"&gt;&lt;/cr-calendar-grid&gt;
+      </code>
+    </pre>
   `,
-  styles: [],
+  styles: [`
+    h4 {
+      margin-top: 2rem;
+    }
+    pre {
+      background-color: #d2d2d2;
+    }
+  `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NoTemplatesComponent {

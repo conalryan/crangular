@@ -2,12 +2,12 @@ import { AfterViewChecked, Directive, ElementRef, Input, Renderer2 } from '@angu
 import { NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 
 @Directive({
-  selector: 'ngb-datepicker[crNgbDatepickerScale]'
+  selector: 'ngb-datepicker[scale]'
 })
-export class NgbDatepickerScaleDirective implements AfterViewChecked {
+export class DatepickerScaleDirective implements AfterViewChecked {
 
-  @Input() crNgbDatepickerScale: number;
-  @Input() monthsPerRoom: number;
+  @Input() scale: number;
+  @Input() monthsPerRow: number;
 
   constructor(
     private readonly _ngbDatepicker: NgbDatepicker,
@@ -16,62 +16,49 @@ export class NgbDatepickerScaleDirective implements AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    console.log(this._ngbDatepicker);
-    console.log(this._elementRef);
-    
-    // ngb-datepicker {
-    //   border: 1px solid #dfdfdf;
-    //   border-radius: .25rem;
-    //   display: inline-block;
-    // }
     const ngbDatepickerEl = this._elementRef.nativeElement;
-    
-    // this._renderer.removeClass(ngbDatepickerEl, 'border'); // doesn't work, need host binding?
-    // this._renderer.removeClass(ngbDatepickerEl, 'border-radius');
-    
-    const ngbDpHeaderEl = ngbDatepickerEl.childNodes[1];
-    this._renderer.removeClass(ngbDpHeaderEl, 'bg-light');
+     
+    // Must maintain single parent for all months ref: https://github.com/ng-bootstrap/ng-bootstrap/blob/4.2.2/src/datepicker/datepicker.ts#L126
+    const ngbDpMonthsEl = ngbDatepickerEl.childNodes[2];
+    this._renderer.addClass(ngbDpMonthsEl, 'row');
     
     // Loop through months
-    const ngbDpMonthsEl = ngbDatepickerEl.childNodes[2];
+    const colSize = 12 / (this.monthsPerRow || 1); // 12 column bootstrap grid
     const ngbDpMonthElLen = ngbDpMonthsEl.childNodes.length;
     for (let i = 0; i < ngbDpMonthElLen; i++) {
       const ngbDpMonthEl = ngbDpMonthsEl.childNodes[i];
       if (ngbDpMonthEl.nodeName === '#comment') {
+        // Alternative is to start index at 1 and skip this check. We could add a test to ensure childNodes[0] is always a comment.
         continue;
       }
-      this._renderer.removeClass(ngbDpMonthEl.childNodes[1], 'bg-light');
+      this._renderer.addClass(ngbDpMonthEl, `col-${colSize}`);
       
       // Loop through weeks
-      const ngbDatepickerMonthViewEl: HTMLElement = ngbDpMonthEl.childNodes[2];
+      // [1] when navigation === 'select', [2] when navigation === 'none'
+      const ngbDatepickerMonthViewIndex = this._ngbDatepicker.navigation === 'none' ? 2 : 1;
+      const ngbDatepickerMonthViewEl: HTMLElement = ngbDpMonthEl.childNodes[ngbDatepickerMonthViewIndex];
       const ngbDpWeekElLen = ngbDatepickerMonthViewEl.childNodes.length;
       for (let j = 0; j < ngbDpWeekElLen; j++) {
         const ngbDpWeekEl = ngbDatepickerMonthViewEl.childNodes[j];
         if (ngbDpWeekEl.nodeName === '#comment') {
+          // Same comment, run time check or test that will fail on breaking change?
           continue;
         }
-        this._renderer.removeClass(ngbDpWeekEl, 'bg-light');
-
+        
         // Loop through days
         const ngbDpWeekDayLen = ngbDpWeekEl.childNodes.length;
         for (let k = 0; k < ngbDpWeekDayLen; k++) {
           const ngbDpWeekDay = ngbDpWeekEl.childNodes[k];
           if (ngbDpWeekDay.nodeName === '#comment') {
+            // Run time check or test that will fail on breaking change?
             continue;
           }
-          this._renderer.removeClass(ngbDpWeekEl, 'font-style');
-          this._renderer.setStyle(ngbDpWeekDay, 'color', '#333333');
           // default is 2 rems set by ng-bootstrap
-          let size = 2 * (this.crNgbDatepickerScale ? this.crNgbDatepickerScale : 1);
+          let size = 2 * (this.scale ? this.scale : 1);
           this._renderer.setStyle(ngbDpWeekDay, 'height', `${size}rem`);
           this._renderer.setStyle(ngbDpWeekDay, 'width', `${size}rem`);
         }
       }
-    }
-    
-    
-    if (this._ngbDatepicker.navigation === 'none') {
-      
     }
   }
 }

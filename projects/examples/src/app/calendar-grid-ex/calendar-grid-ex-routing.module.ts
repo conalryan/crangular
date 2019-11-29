@@ -1,42 +1,42 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CalendarGridExComponent } from './calendar-grid-ex.component';
+import { CalendarGridModelExComponent } from './calendar-grid-model-ex.component';
+import { MultiRowTemplateComponent } from './multi-row-template.component';
+import { NestedRowTemplateComponent } from './nested-row-template.component';
 import { NoTemplatesComponent } from './no-templates.component';
 import { PartsComponent } from './parts.component';
-import { SingleTemplatePerLevelComponent } from './single-template-per-level.component';
-import { SingleTemplateComponent } from './single-template.component';
-import { TemplatePerParentComponent } from './template-per-parent.component';
-import { TemplatePerRowComponent } from './template-per-row.component';
+import { SingleRowTemplateComponent } from './single-row-template.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: CalendarGridExComponent
+    pathMatch: 'full',
+    redirectTo: 'single-template'
   },
   {
     path: 'parts',
     component: PartsComponent
   },
   {
+    path: 'model',
+    component: CalendarGridModelExComponent
+  },
+  {
     path: 'no-templates',
     component: NoTemplatesComponent
   },
   {
-    path: 'single-template',
-    component: SingleTemplateComponent
+    path: 'single-row-template',
+    component: SingleRowTemplateComponent
   },
   {
-    path: 'single-template-per-level',
-    component: SingleTemplatePerLevelComponent
+    path: 'multi-row-template',
+    component: MultiRowTemplateComponent
   },
   {
-    path: 'template-per-row',
-    component: TemplatePerRowComponent
-  },
-  {
-    path: 'template-per-parent',
-    component: TemplatePerParentComponent
-  },
+    path: 'nested-row-template',
+    component: NestedRowTemplateComponent
+  }
 ];
 
 @NgModule({
