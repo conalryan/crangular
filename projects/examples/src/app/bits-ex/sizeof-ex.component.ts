@@ -2,9 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { sizeof } from '../../../../crangular/src/lib/bits/sizeof';
 
 @Component({
-  selector: 'excr-sizeof-ex',
+  selector: 'cr-sizeof-ex',
   templateUrl: './sizeof-ex.component.html',
-  styleUrls: ['./sizeof-ex.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SizeofExComponent {

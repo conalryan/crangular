@@ -1,6 +1,5 @@
-import { Directive, ElementRef, Renderer2, AfterViewChecked, Input, ApplicationRef, ComponentRef } from '@angular/core';
+import { AfterViewChecked, Directive, ElementRef, Input, Renderer2 } from '@angular/core';
 import { NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
-import { NgbDatepickerMonthView } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker.module';
 
 @Directive({
   selector: 'ngb-datepicker[crNgbDatepickerScale]'

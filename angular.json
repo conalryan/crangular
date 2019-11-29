@@ -7,15 +7,15 @@
       "root": "projects/examples/",
       "sourceRoot": "projects/examples/src",
       "projectType": "application",
-      "prefix": "excr",
+      "prefix": "cr",
       "schematics": {
         "@schematics/angular:component": {
           "changeDetection": "OnPush",
           "style": "scss",
-          "prefix": "excr"
+          "prefix": "cr"
         },
         "@schematics/angular:directive": {
-          "prefix": "excr"
+          "prefix": "cr"
         }
       },
       "architect": {
@@ -139,6 +139,41 @@
             "tsConfig": [
               "projects/crangular/tsconfig.lib.json",
               "projects/crangular/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "study": {
+      "root": "projects/study",
+      "sourceRoot": "projects/study/src",
+      "projectType": "library",
+      "prefix": "cr",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/study/tsconfig.lib.json",
+            "project": "projects/study/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/study/src/test.ts",
+            "tsConfig": "projects/study/tsconfig.spec.json",
+            "karmaConfig": "projects/study/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/study/tsconfig.lib.json",
+              "projects/study/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

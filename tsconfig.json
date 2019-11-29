@@ -30,6 +30,12 @@
       ],
       "crangular/*": [
         "dist/crangular/*"
+      ],
+      "study": [
+        "dist/study"
+      ],
+      "study/*": [
+        "dist/study/*"
       ]
     }
   }

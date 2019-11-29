@@ -5,7 +5,7 @@ import { NgbDatepickerScaleDirective } from './ngb-datepicker-scale.directive';
 
 @NgModule({
   declarations: [NgbDatepickerScaleDirective],
-  exports: [NgbDatepickerScaleDirective],
+  exports: [NgbDatepickerModule, NgbDatepickerScaleDirective],
   imports: [
     CommonModule,
     NgbDatepickerModule

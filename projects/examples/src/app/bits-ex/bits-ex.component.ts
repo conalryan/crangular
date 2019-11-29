@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { BitMask, clearBit, getBit, printBitMask, setBit, prevSetBit } from '../../../../crangular/src/lib/bits/bits';
+import { BitMask, clearBit, getBit, prevSetBit, printBitMask, setBit } from '../../../../crangular/src/lib/bits/bits';
 
 @Component({
   selector: 'cr-bits-ex',
   templateUrl: './bits-ex.component.html',
-  styleUrls: ['./bits-ex.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BitsExComponent {
