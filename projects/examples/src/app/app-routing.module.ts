@@ -52,7 +52,7 @@ const routes: Routes = [
   },
   {
     path: 'directives',
-    component: DirectivesExComponent
+    loadChildren: './directives-ex/directives-ex.module#DirectivesExModule'
   },
   {
     path: 'ngb-datepicker-3-month',
