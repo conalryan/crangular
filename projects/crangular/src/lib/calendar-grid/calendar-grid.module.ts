@@ -8,7 +8,6 @@ import { CalendarGridCellComponent, CalendarGridCellTplDirective, CalendarGridCo
     CalendarGridLabelElmDirective,
     CalendarGridCellTplDirective,
     CalendarGridRowDirective,
-
     CalendarGridCellComponent,
     CalendarGridComponent
   ],
@@ -18,7 +17,6 @@ import { CalendarGridCellComponent, CalendarGridCellTplDirective, CalendarGridCo
     CalendarGridLabelElmDirective,
     CalendarGridCellTplDirective,
     CalendarGridRowDirective,
-
     CalendarGridCellComponent,
     CalendarGridComponent
   ]
