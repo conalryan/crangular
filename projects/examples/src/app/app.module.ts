@@ -2,11 +2,10 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDatepickerScaleModule } from 'projects/crangular/src/lib/ngb-datepicker-scale/ngb-datepicker-scale.module';
-import { BitsModule } from '../../../crangular/src/lib/bits/bits.module';
 import { CalendarGridModule } from '../../../crangular/src/lib/calendar-grid/calendar-grid.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BitsExComponent } from './bits-ex/bits-ex.component';
+import { BitsExModule } from './bits-ex/bits-ex.module';
 import { CalendarGridExComponent } from './calendar-grid-ex/calendar-grid-ex.component';
 import { NoTemplatesComponent } from './calendar-grid-ex/no-templates.component';
 import { PartsComponent } from './calendar-grid-ex/parts.component';
@@ -25,7 +24,6 @@ import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
   declarations: [
     AppComponent,
     CalendarGridExComponent,
-    BitsExComponent,
     SizeofExComponent,
     NoTemplatesComponent,
     PartsComponent,
@@ -41,8 +39,8 @@ import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
   ],
   imports: [
     BrowserModule,
+    BitsExModule,
     NgbDatepickerModule,
-    BitsModule,
     CalendarGridModule,
     NgbDatepickerScaleModule,
     AppRoutingModule

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BitsExComponent } from './bits-ex/bits-ex.component';
 import { CalendarGridExComponent } from './calendar-grid-ex/calendar-grid-ex.component';
 import { NoTemplatesComponent } from './calendar-grid-ex/no-templates.component';
 import { PartsComponent } from './calendar-grid-ex/parts.component';
@@ -8,7 +7,6 @@ import { SingleTemplatePerLevelComponent } from './calendar-grid-ex/single-templ
 import { SingleTemplateComponent } from './calendar-grid-ex/single-template.component';
 import { TemplatePerParentComponent } from './calendar-grid-ex/template-per-parent.component';
 import { TemplatePerRowComponent } from './calendar-grid-ex/template-per-row.component';
-import { DirectivesExComponent } from './directives-ex/directives-ex.component';
 import { NgbDatepicker3MonthExComponent } from './ngb-datepicker-ex/ngb-datepicker-3-month-ex.component';
 import { NgbDatepicker6MonthExComponent } from './ngb-datepicker-ex/ngb-datepicker-6-month-ex.component';
 import { NgbDatepicker6MonthSplitExComponent } from './ngb-datepicker-ex/ngb-datepicker-6-month-split-ex.component';
@@ -20,7 +18,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'calendar-grid', pathMatch: 'full' },
   {
     path: 'bits',
-    component: BitsExComponent
+    loadChildren: './bits-ex/bits-ex.module#BitsExModule'
   },
   {
     path: 'calendar-grid',
