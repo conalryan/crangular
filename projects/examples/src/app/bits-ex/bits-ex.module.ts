@@ -1,17 +1,15 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { NgModule } from '@angular/core';
 import { BitsExRoutingModule } from './bits-ex-routing.module';
 import { BitsExComponent } from './bits-ex.component';
-import { BitsModule } from 'projects/crangular/src/lib/bits/bits.module';
+import { SizeofExComponent } from './sizeof-ex.component';
 
 @NgModule({
-  declarations: [BitsExComponent],
-  exports: [BitsExComponent],
+  declarations: [BitsExComponent, SizeofExComponent],
+  exports: [BitsExComponent, SizeofExComponent],
   imports: [
     CommonModule,
-    BitsExRoutingModule,
-    BitsModule
+    BitsExRoutingModule
   ]
 })
 export class BitsExModule { }

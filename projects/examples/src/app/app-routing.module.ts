@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SizeofExComponent } from './sizeof-ex/sizeof-ex.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'calendar-grid', pathMatch: 'full' },
@@ -19,10 +18,6 @@ const routes: Routes = [
   {
     path: 'ngb-datepicker-scale',
     loadChildren: './ngb-datepicker-scale-ex/ngb-datepicker-scale-ex.module#NgbDatepickerScaleExModule'
-  },
-  {
-    path: 'sizeof',
-    component: SizeofExComponent
   }
 ];
 
