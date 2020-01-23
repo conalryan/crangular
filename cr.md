@@ -116,3 +116,34 @@ ng g c bits-ex --project examples --spec false
 Schematics
 --------------------------------------------------------------------------------
 
+
+
+Packaging
+--------------------------------------------------------------------------------
+
+```bash
+cd dist/some-lib
+npm pack
+```
+
+Creates a tar ball
+
+Reference tar ball with file url
+package.json
+```json
+dependencies: {
+...
+"some-lib": "file:some/path/dist/some-lib-0.0.1.tgz"
+...
+}
+```
+
+Add scope name in package.json
+`@myStuff/some-lib`
+
+Add publish task to package.json
+```json
+"publish": "cd dist/some-lib && npm publish"
+```
+
+
