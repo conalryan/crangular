@@ -102,7 +102,7 @@ export class CalendarGridData {
   private _visibleRows: BitMask;
   private _parentRows: BitMask;
 
-  static cells = <T>(label: string, startDate: Date, numDays?: number, data?: T[]): CalendarGridCell<T>[] => {
+  static cells<T>(label: string, startDate: Date, numDays?: number, data?: T[]): CalendarGridCell<T>[] {
     const calendarGridCells: CalendarGridCell<T>[] = [];
     const length = numDays || (isNotEmpty(data) ? data.length : 0);
     for (let i = 0; i < length; i++) {
@@ -120,7 +120,7 @@ export class CalendarGridData {
     return calendarGridCells;
   }
 
-  static row = <T>(label: string, startDate: Date, numDays?: number, data?: T[]): CalendarGridRow<T> => {
+  static row<T>(label: string, startDate: Date, numDays?: number, data?: T[]): CalendarGridRow<T> {
     return {
       label: label,
       cells: CalendarGridData.cells(label, startDate, numDays, data)

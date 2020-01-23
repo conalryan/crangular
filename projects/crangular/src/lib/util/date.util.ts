@@ -59,9 +59,6 @@ export class DateUtil {
   /**
    * Calculate the number of days between two Dates
    *
-   * @param {Date} start
-   * @param {Date} end
-   * @returns {number}
    */
   public static numberOfDays(start: Date, end: Date): number {
     if (start && end) {
@@ -91,9 +88,6 @@ export class DateUtil {
   /**
    * Calculate the number of days between two NgbDateStruct
    *
-   * @param {NgbDateStruct} start
-   * @param {NgbDateStruct} end
-   * @returns {number}
    */
   public static numberOfNgbDays(start: NgbDateStruct, end: NgbDateStruct): number {
     if (DateUtil.isValidNgbDateStruct(start) && DateUtil.isValidNgbDateStruct(end)) {
@@ -105,9 +99,6 @@ export class DateUtil {
   /**
    * Add a number of days to the NgbDateStruct
    *
-   * @param {NgbDateStruct} ngbDate
-   * @param {number} days
-   * @returns {NgbDateStruct}
    */
   public static addDays(ngbDate: NgbDateStruct, days: number): NgbDateStruct {
     if (DateUtil.isValidNgbDateStruct(ngbDate) && days != null) {
@@ -129,9 +120,6 @@ export class DateUtil {
   /**
    * Subract a number of days from the NgbDateStruct
    *
-   * @param {NgbDateStruct} ngbDate
-   * @param {number} days
-   * @returns {NgbDateStruct}
    */
   public static subtractDays(ngbDate: NgbDateStruct, days: number): NgbDateStruct {
     if (DateUtil.isValidNgbDateStruct(ngbDate) && days) {
@@ -153,9 +141,6 @@ export class DateUtil {
   /**
    * Compare 2 NgbDateStructs and determine if they are equal year, month, day
    *
-   * @param {NgbDateStruct} date
-   * @param {NgbDateStruct} compDate
-   * @returns {boolean}
    */
   public static areDatesEqual(date: NgbDateStruct, compDate: NgbDateStruct): boolean {
     return date && compDate && date.year === compDate.year && date.month === compDate.month && date.day === compDate.day;
@@ -174,7 +159,6 @@ export class DateUtil {
   /**
    * Return today's date - 1 day as an NgbDateStruct
    *
-   * @returns {NgbDateStruct}
    */
   public static yesterday(): NgbDateStruct {
     return DateUtil.subtractDays(DateUtil.today(), 1);
@@ -183,10 +167,9 @@ export class DateUtil {
   /**
    * Returns today's date as an NgbDateStruct
    *
-   * @returns {NgbDateStruct}
    */
   public static today(): NgbDateStruct {
-    const today = this.dateAsUTC(new Date());
+    const today = DateUtil.dateAsUTC(new Date());
     return {
       year: today.getFullYear(),
       month: today.getMonth() + 1,
@@ -195,7 +178,7 @@ export class DateUtil {
   }
 
   public static isDateInPast(date: NgbDateStruct): boolean {
-    const today = this.dateAsUTC(new Date());
+    const today = DateUtil.dateAsUTC(new Date());
     /**
      * Setting the hours to 0 so both `today` and `compareTo` are
      * set to 0:00:00 for the comparison.
@@ -208,7 +191,6 @@ export class DateUtil {
   /**
    * Return today's date + 1 day as an NgbDateStruct
    *
-   * @returns {NgbDateStruct}
    */
   public static tomorrow(): NgbDateStruct {
     return DateUtil.addDays(DateUtil.today(), 1);
@@ -226,10 +208,6 @@ export class DateUtil {
    *    JS Date() will return the first of the following month (i.e. new Date(2017, 8, 31); // Sep 31st returns Oct
    * 1st).
    *
-   * @param {Date} date
-   * @param {DateIncrementField} incrementField
-   * @param {Date} minDate - optional parameter to set the minimum date to pass, defaults to new Date()
-   * @returns {Date}
    */
   public static incrementUntilPresent(date: Date, incrementField: DateIncrementField, minDate?: Date): Date {
     if (date && incrementField) {
@@ -268,8 +246,6 @@ export class DateUtil {
   /**
    * Validate NgbDateStruct has a year, month and day property defined
    *
-   * @param {NgbDateStruct} ngbDate
-   * @returns {boolean}
    */
   public static isValidNgbDateStruct(ngbDate: NgbDateStruct): boolean {
     return !!(ngbDate && ngbDate.year && ngbDate.month && ngbDate.day);
@@ -279,10 +255,6 @@ export class DateUtil {
   /**
    * Transform year, month, day numbers into a NgbDateStruct
    *
-   * @param {number} year
-   * @param {number} month
-   * @param {number} day
-   * @returns {NgbDateStruct}
    */
   public static ngbDateStruct(year: number, month: number, day: number) {
     if (year && month && day) {
@@ -295,8 +267,6 @@ export class DateUtil {
    * Transform NgbDateStruct to Date.
    * JS Date() uses 0 indexed months, however, NgbDateStruct is set to use 1 indexed months (i.e. Jan === 1, not 0).
    *
-   * @param {NgbDateStruct} ngbDate
-   * @returns {Date}
    */
   public static ngbDateStructToDate(ngbDate: NgbDateStruct): Date {
     if (DateUtil.isValidNgbDateStruct(ngbDate)) {
@@ -306,10 +276,9 @@ export class DateUtil {
   }
 
   /**
-   * Transform NgbDateStruct to ISO date string in the format 'yyyy-mm-dd'
+   * Transform NgbDateStruct to Date.
+   * JS Date() uses 0 indexed months, however, NgbDateStruct is set to use 1 indexed months (i.e. Jan === 1, not 0).
    *
-   * @param {NgbDateStruct} ngbDate
-   * @returns {string}
    */
   public static ngbDateStructToIsoStringDate(ngbDate: NgbDateStruct): string {
     const year = DateUtil.prependDigitsToYear(ngbDate.year);
@@ -321,8 +290,6 @@ export class DateUtil {
   /**
    * Transform NgbDateStruct to MMYY
    *
-   * @param {NgbDateStruct} ngbDate
-   * @returns {string}
    */
   public static ngbDateStructToMmYy(ngbDate: NgbDateStruct): string {
     const year = DateUtil.prependDigitsToYear(ngbDate.year)
@@ -336,13 +303,11 @@ export class DateUtil {
    * We need to initialize ngbDateStruct with last day of the month as credit cards usually expire on
    * last day of the month. (we use this function to convert credit card expiry to a ngbDateStruct).
    * Even for a general use when we specify a month and year we mean it should be valid throughout the month.
-   * @param {string} mmYy
-   * @returns {NgbDateStruct}
    */
   public static mmYyToNgbDateStruct(mmYy: string): NgbDateStruct {
     const maxDatesOfInputMmYy = new Date(+mmYy.substring(2), +mmYy.substring(0, 2), 0).getDate();
     return {
-      year: this.prependDigitsToYear(+mmYy.substring(2)),
+      year: DateUtil.prependDigitsToYear(+mmYy.substring(2)),
       month: +mmYy.substring(0, 2),
       day: maxDatesOfInputMmYy
     } as NgbDateStruct;
@@ -351,8 +316,6 @@ export class DateUtil {
   /**
    * Transform ISO date string in the format 'yyyy-mm-dd' to NgbDateStruct
    *
-   * @param {string} date
-   * @returns {NgbDateStruct}
    */
   public static isoStringDateToNgbDateStruct(date: string): NgbDateStruct {
     if (date) {
@@ -368,8 +331,6 @@ export class DateUtil {
   /**
    * Transform ISO date string in the format 'yyyy-mm-dd' to Date
    *
-   * @param {string} date
-   * @returns {Date}
    */
   public static isoStringDateToDate(date: string): Date {
     if (date) {
@@ -385,8 +346,6 @@ export class DateUtil {
   /**
    * Transform Date to NgbDateStruct
    *
-   * @param {Date} date
-   * @returns {NgbDateStruct}
    */
   public static dateToNgbDateStruct(date: Date): NgbDateStruct {
     if (date) {
@@ -404,7 +363,7 @@ export class DateUtil {
    * YYYY-MM-DD string representation.
    */
   public static dateToYYYYMMDD(date: Date): string {
-    return this.ngbDateStructToIsoStringDate(this.dateToNgbDateStruct(date));
+    return DateUtil.ngbDateStructToIsoStringDate(DateUtil.dateToNgbDateStruct(date));
   }
 
   /**
@@ -412,8 +371,6 @@ export class DateUtil {
    * If user only entered 2 digits, add the first two digits from the current year.
    * If user only entered a single digit, add the first two digits form the current year to ('0' + digit)
    *
-   * @param {number} year
-   * @returns {number}
    */
   public static prependDigitsToYear(year: number): number {
     if (year) {
@@ -440,8 +397,6 @@ export class DateUtil {
    * Convert a number day or month into a string day or month in the format dd or mm.
    * e.g. 5 -> '05', 10 -> '10'
    *
-   * @param {number} dayOrMonth
-   * @returns {string}
    */
   public static jsDayOrMonthToString(dayOrMonth: number): string {
     let numAsString = dayOrMonth.toString();
@@ -452,8 +407,6 @@ export class DateUtil {
   /**
    * Create date as UTC date.
    *
-   * @param date
-   * @returns {Date}
    */
   public static dateAsUTC(date): Date {
     return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
@@ -461,13 +414,10 @@ export class DateUtil {
 
   /**
    * create a date range from a start Date to end Date
-   * @param {NgbDateStruct} startDate
-   * @param {NgbDateStruct} endDate
-   * @returns {NgbDateStruct[]}
    */
   public static generateDateRange(startDate: NgbDateStruct, endDate: NgbDateStruct): NgbDateStruct[] {
     const dateRange: NgbDateStruct[] = [];
-    for (let date = startDate; this.isDateLessThanOrEqual(date, endDate); date = this.addDays(date, 1)) {
+    for (let date = startDate; DateUtil.isDateLessThanOrEqual(date, endDate); date = DateUtil.addDays(date, 1)) {
       dateRange.push(date);
     }
     return dateRange;
@@ -476,8 +426,6 @@ export class DateUtil {
   /**
    * Create a date range from a given Date and number of days
    * e.g. (2019-09-19, 2) -> [2019-09-19, 2019-09-20]
-   * @param startDate
-   * @param numDays
    */
   public static generateJsDateRange(startDate: Date, numDays: number): Date[] {
     const dates: Date[] = [];
@@ -497,7 +445,6 @@ export class DateUtil {
    * Monday = 1
    * ...
    * Saturday = 6
-   * @param date
    */
   public static isWeekend(date: Date): boolean {
     return date && (date.getDay() === 0 || date.getDay() === 6);
@@ -529,8 +476,6 @@ export class DateUtil {
   /**
    * Returns boolean based on the validity of the date string. Optionally tests the regex
    * if passed along with the date.
-   * @param date string
-   * @param regexp optional regex to validate
    */
   public static isValidIsoDate(date: string, regexp?: RegExp): boolean {
     const tokens = date.split('-');
@@ -546,7 +491,6 @@ export class DateUtil {
 
   /**
    * Custom type guard for {NgbDateStruct}
-   * @param d
    */
   public static isNgbDateStruct(d: any): d is NgbDateStruct {
     return !!d && typeof d === 'object' && 'year' in d && 'month' in d && 'day' in d;
@@ -555,10 +499,6 @@ export class DateUtil {
   /**
    * get the date change type between two date ranges
    * More Documentation of DateChangeType can be found at {@see DateChangeType}
-   * @param newStartDate
-   * @param newEndDate
-   * @param oldStartDate
-   * @param oldEndDate
    */
   public static getDateChangeType(
     newStartDate: NgbDateStruct,
@@ -630,8 +570,6 @@ export class DateUtil {
    *
    * Date.getDay() will return day of week locale time where Sunday == 0 and Saturday == 6
    *
-   * @param dow
-   * @param date
    */
   public static dowMatchDate(dow: string[], date: Date): boolean {
     let dowMatch = false;

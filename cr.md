@@ -1,6 +1,7 @@
 # Crangular
 
-## Scaffold
+Scaffold
+--------------------------------------------------------------------------------
 ```bash
 ng new crangular --createApplication=false
 
@@ -29,9 +30,11 @@ found 0 vulnerabilities
     Successfully initialized git.
 ```
 
-## Set Defaults
+Set Defaults
+--------------------------------------------------------------------------------
 
-### angular.json
+angular.json
+--------------------------------------------------------------------------------
 - CLI defaults to:
   - workspace level, which can be overridden by defaults set at the:
   - project level, which can be overridden by:
@@ -57,11 +60,13 @@ ng config schematics.@schematics/angular:directive.prefix cr
 }
 ```
 
-### ng-bootstrap
+ng-bootstrap
+--------------------------------------------------------------------------------
 ```bash
 yarn add @ng-bootstrap/ng-bootstrap@4
 ```
-### bootstrap
+bootstrap
+--------------------------------------------------------------------------------
 ```bash
 yarn add bootstrap
 ```
@@ -70,23 +75,27 @@ styles.scss
 @import '~bootstrap/scss/bootstrap';
 ```
 
-### examples app
+examples app
+--------------------------------------------------------------------------------
 ```bash
 ng g app examples --style=scss --prefix=cr --routing
 ```
 I'm surprised I still need to specify `--style=scss` and `prefix=cr` even though the were added as defaults.
 
-### crangular lib
+crangular lib
+--------------------------------------------------------------------------------
 ```bash
 ng g lib crangular --style=scss --prefix=cr
 ```
 
-### calendargrid module
+calendargrid module
+--------------------------------------------------------------------------------
 ```bash
 ng g m calendargrid --project crangular
 ```
 
-## Bitmask
+Bitmask
+--------------------------------------------------------------------------------
 
 Setup an array of numbers that will be used as a bitmask for the row visibility.
 Rational: 
@@ -103,3 +112,7 @@ ng g m bits --project crangular
 ng g c bits --project crangular -it -is
 ng g c bits-ex --project examples --spec false
 ```
+
+Schematics
+--------------------------------------------------------------------------------
+

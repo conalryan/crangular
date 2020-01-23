@@ -1,8 +1,17 @@
 {
   "name": "crangular",
   "version": "0.0.1",
+  "scripts": {
+    "build": "../../node_modules/.bin/tsc -p tsconfig.schematics.json",
+    "copy:schemas": "cp -P schematics/*/schema.json ../../dist/crangular/",
+    "copy:files": "cp -P schematics/*/files/** ../../dist/crangular/",
+    "copy:collection": "cp schematics/collection.json ../../dist/crangular/schematics/collection.json",
+    "postbuild": "yarn run copy:schemas && yarn run copy:files && yarn run copy:collection"
+  },
   "peerDependencies": {
     "@angular/common": "^7.2.0",
     "@angular/core": "^7.2.0"
-  }
+  },
+  "schematics": "./schematics/collection.json"
 }
+
